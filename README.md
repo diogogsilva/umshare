@@ -2,6 +2,6 @@
 # UMShare
 
 Trabalho Realizado por:
-  Diogo Silva\n
-  Gabriel Santos\n
-  Carlos Faria\n
+  Diogo Silva
+  Gabriel Santos
+  Carlos Faria
