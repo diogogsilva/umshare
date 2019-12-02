@@ -22,7 +22,19 @@ block content
             input(type='text' placeholder='Search..' name='search')
             button(type='submit')
               i.fa.fa-search
-    .w3-row
+    each pub in publicacoes
+      .w3-row
+        .w3-col.l8.s12
+          .w3-card-4.w3-margin.w3-white
+            img(src='/images/logo.png' alt='Logo' style='width:20%')
+            .w3-container
+              h3
+                b= pub.nome
+              h5
+                p= pub.descricao
+                span.w3-opacity= pub.data
+
+    //.w3-row
       // Blog entries
       .w3-col.l8.s12
         // Blog entry
