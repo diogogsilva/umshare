@@ -1,0 +1,22 @@
+extends layout
+
+block content
+  body.w3-container
+    .w3-center
+        img.w3-circle.w3-margin-top.w3-center(src='/images/logo.png' alt='Avatar' style='width:10%')
+    form(action="/login" method="POST")
+      .w3-container
+          .w3-section
+              label
+              b Email
+              input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' placeholder='Enter Email')
+              label
+              b Password
+              input.w3-input.w3-border.w3-hover-border-black(type='password' placeholder='Enter Password')
+              //input.w3-check(type='checkbox' checked='checked')
+              //|  Remember me
+              input(type="submit" value="Enviar")
+              span.w3-right.w3-padding.w3-hide-small
+                  | Don't have an account? 
+                  a(href='http://localhost:2222/register') Register
+
