@@ -5,37 +5,39 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/umshare-Alunos', {useNewUrlParser: true, useUnifiedTopology: true})
-  .then(()=> console.log('Servidor Mongo da API da agenda a correr...'))
-  .catch((erro)=> console.log('Mongo: erro na conexão: ' + erro))
+mongoose.connect('mongodb://127.0.0.1:27017/umsharedb', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Servidor Mongo da API da agenda a correr...'))
+  .catch((erro) => console.log('Mongo: erro na conexão: ' + erro))
 
 var eventosRouter = require('./routes/eventos');
 var utilizadoresRouter = require('./routes/utilizadores');
+var ficheirosRouter = require('./routes/ficheiros');
+var publicacoesRouter = require('./routes/publicacoes');
 
 //atutenticação com JWT
 var passport = require('passport')
 var JWTStrategy = require('passport-jwt').Strategy
 var ExtraJWT = require('passport-jwt').ExtractJwt
 
-var extractFromQS = function(req){
+var extractFromQS = function (req) {
   var token = null
-  if(req.query && req.query.token) token = req.query.token
+  if (req.query && req.query.token) token = req.query.token
   return token
 }
 
-var extractFromBody = function(req){
+var extractFromBody = function (req) {
   var token = null
-  if(req.body && req.body.token) token = req.body.token
+  if (req.body && req.body.token) token = req.body.token
   return token
 }
 
 passport.use(new JWTStrategy({
   secretOrKey: 'daw2019',
-  jwtFromRequest: ExtraJWT.fromExtractors([extractFromQS,extractFromBody])
-}, async(payload,done)=>{
-  try{
+  jwtFromRequest: ExtraJWT.fromExtractors([extractFromQS, extractFromBody])
+}, async (payload, done) => {
+  try {
     return done(null, payload)
-  }catch(error){
+  } catch (error) {
     return done(error)
   }
 }))
@@ -56,16 +58,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/eventos', eventosRouter)
 app.use('/utilizadores', utilizadoresRouter);
-app.use('/', eventosRouter);
-
+app.use('/ficheiros', publicacoesRouter);
+app.use('/publicacoes', publicacoesRouter);
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
