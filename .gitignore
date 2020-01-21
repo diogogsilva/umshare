@@ -2,3 +2,5 @@
 node_modules/
 #umshare/alunos/public/ficheiros/*
 ficheiros/
+#sessions
+sessions/
