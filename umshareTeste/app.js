@@ -27,7 +27,7 @@ passport.use(new LocalStrategy(
     var token = jwt.sign({},"daw2019",
     {
       expiresIn: 3000,
-      issuer: "Servidor MyAgenda"
+      issuer: "Servidor UMShare"
     })
   axios.get('http://localhost:5003/utilizadores/' + email + '?token=' + token)
     .then(dados => {

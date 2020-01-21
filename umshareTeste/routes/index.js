@@ -10,12 +10,14 @@ var bcrypt = require('bcryptjs')
   res.render('login');
 });*/
 router.get('/', verificaAutenticacao, function(req, res) {
-  axios.get('http://localhost:5003')
-    .then(dados => res.render('index', {lista: dados.data}))
-    .catch(e => res.render('error', {error: e}))
+  /*axios.get('http://localhost:5003')
+    then(dados => res.render('index', {lista: dados.data}))
+    .catch(e => res.render('error', {error: e}))*/
+    res.redirect('/feed')
+    
 });
 
-router.get('/feed', function(req, res) {
+router.get('/feed', verificaAutenticacao, function(req, res) {
   var publicacao = {"nome": "Publicacao1", "descricao": "Descricao Publicacao 1", "data": "02/12/2019 21:40"}
   var publicacao2 = {"nome": "Publicacao2", "descricao": "Descricao Publicacao 2", "data": "30/09/2019 15:20"}
   var publicacao3 = {"nome": "Publicacao3", "descricao": "Descricao Publicacao 3", "data": "12/07/2019 9:15"}
@@ -67,8 +69,11 @@ router.post('/reg', function(req,res){
 function verificaAutenticacao(req,res,next){
   if(req.isAuthenticated()){
   //req.isAuthenticated() will return true if user is logged in
+    console.log("verificou a autenticação!")
+    //res.redirect("/feed");
     next();
   } else{
+    console.log("não verificou a autenticação!")
     res.redirect("/login");}
 }
 

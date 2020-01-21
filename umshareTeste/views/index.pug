@@ -24,7 +24,7 @@ block content
             input(type='text' placeholder='Search..' name='search')
             button(type='submit')
               i.fa.fa-search
-    //each pub in publicacoes
+    each pub in publicacoes
       .w3-row
         .w3-col.l8.s12
           .w3-card-4.w3-margin.w3-white
@@ -36,7 +36,7 @@ block content
                 p= pub.descricao
                 span.w3-opacity= pub.data
 
-    //.w3-row
+    .w3-row
       // Blog entries
       .w3-col.l8.s12
         // Blog entry

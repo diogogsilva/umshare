@@ -5,8 +5,8 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var mongoose = require('mongoose');
 
-mongoose.connect('mongodb://127.0.0.1:27017/umsharedb', { useNewUrlParser: true, useUnifiedTopology: true })
-  .then(() => console.log('Servidor Mongo da API da agenda a correr...'))
+mongoose.connect('mongodb://127.0.0.1:27017/umshare-Alunos', { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => console.log('Servidor Mongo da API do UMShare a correr...'))
   .catch((erro) => console.log('Mongo: erro na conexão: ' + erro))
 
 var eventosRouter = require('./routes/eventos');
