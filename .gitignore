@@ -1,2 +1,4 @@
 #umshare/node_modules/*
+node_modules/
 #umshare/alunos/public/ficheiros/*
+ficheiros/
