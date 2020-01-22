@@ -5,6 +5,6 @@ var utilizadorSchema = new mongoose.Schema({
     nome: { type: String, required: true },
     password: { type: String, required: true },
     ultimoAcesso: String
-  });
+});
 
 module.exports = mongoose.model('utilizadores', utilizadorSchema)
