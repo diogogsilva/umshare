@@ -1,5 +1,11 @@
 const mongoose = require('mongoose')
 
+var comentarioSchema = new mongoose.Schema({
+    conteudo: { type: String },
+    utilizador: { type: String },
+    data: { type: String }
+})
+
 var ficheiroSchema = new mongoose.Schema({
     designacao: { type: String },
     size: { type: String },
@@ -15,6 +21,7 @@ var publicacaoSchema = new mongoose.Schema({
     utilizador: { type: String },
     metadata: [String],
     grupo: { type: String },
+    comentarios: [comentarioSchema],
     data: { type: String }
 });
 
