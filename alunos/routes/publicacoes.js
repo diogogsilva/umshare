@@ -10,8 +10,6 @@ var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
 
-
-
 router.get('/', function (req, res) {
     Publicacoes.listar()
         .then(dados => res.jsonp(dados))
@@ -32,12 +30,14 @@ router.get('/user/:uid', function (req, res) {
 
 router.post('/', upload.array('ficheiro'), function (req, res) {
     //console.log(req.files)
-    console.log(req.body)
+    //console.log(req.body)
+
     var ficheiros = []
-    let data = new Date()
-    if (req.files.length != 0) {
+    var data = new Date()
+    var metad = req.body.metadata.split(',')
+
+    if (req.files.length > 0) {
         for (var i = 0; i < req.files.length; i++) {
-            var metad = req.body.metadata.split(',')
             let novoFicheiro = new Ficheiro(
                 {
                     dataupload: data.toISOString(),
@@ -61,7 +61,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
     //console.log(ficheiros)
     Publicacoes.inserir(novaPublicacao)
         .then(dados => {
-            if (req.files.length != 0) {
+            if (req.files.length > 0) {
                 fs.mkdir(
                     __dirname + "/../public/ficheiros/" + dados._id,
                     {
@@ -72,7 +72,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
                         if (err) {
                             throw err;
                         }
-                        console.log("Directory " + dados._id + " criada");
+                        console.log("Diretoria " + dados._id + " criada");
                     }
                 );
                 for (var i = 0; i < req.files.length; i++) {
@@ -92,11 +92,6 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
         .catch(e => res.status(500).jsonp(e))
 })
 /*
-let oldPath = __dirname + '/../' + req.file.path
-let newPath = __dirname + '/../public/ficheiros/' + req.file.originalname
-fs.rename(oldPath, newPath, function (err) {
-    if (err) throw err
-}),
     novoFicheiro.save(function (err, ficheiro) {
         if (!err) console.log('Ficheiro guardado com sucesso!')
         else console.log('ERRO: ' + err)

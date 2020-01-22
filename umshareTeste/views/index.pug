@@ -24,13 +24,14 @@ block content
             input(type='text' placeholder='Search..' name='search')
             button(type='submit')
               i.fa.fa-search
-  form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoForm").w3-container.w3-center.w3-padding-32.w3-border.w3-border-red
-    input.w3-input.w3-cell.w3-border(type="text" name="metadata" placeholder="Hashtags")
-    input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Texto")
-    .w3-cell-row(id="f1")
-      input.w3-input.w3-cell(type="file" name="ficheiro")
-    button.w3-button.w3-round-large.w3-indigo(id='addfile') +1
-    input.w3-input(type="submit" value="Enviar" id="btnPublicar")
+    form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoForm").w3-container.w3-center.w3-padding-16.w3-border.w3-border-indigo
+      h4.w3-left Publicação
+      input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
+      input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="conteudo" placeholder="Texto")
+      .w3-cell-row(id="f1")
+        input.w3-input.w3-cell(type="file" name="ficheiro")
+      button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfile') Adicionar outro ficheiro
+      input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
     each pub in publicacoes
       .w3-row
         .w3-col.l8.s12
