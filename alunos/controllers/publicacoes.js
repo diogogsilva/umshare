@@ -49,14 +49,13 @@ module.exports.inserir = pub => {
 
 // Inserção de comentário
 
-module.exports.inserirComentario = (com, pubid) => {
-    //var novoCom = new Comentario(com)
-    Publicacao.findOneAndUpdate({ _id: pubid }, { $push: { comentarios: com } },
-        function (error, success) {
-            if (error) {
-                console.log(error);
-            } else {
-                console.log(success);
-            }
-        })
+module.exports.adicionarComentario = (com, pubid) => {
+    return Publicacao
+        .findOneAndUpdate({ "_id": pubid }, { $push: { "comentarios": com } })
 }
+
+module.exports.removerComentario = (comid, pubid) => {
+    return Publicacao
+        .update({ "_id": pubid }, { $pull: { "comentarios": comid } })
+}
+

@@ -4,11 +4,21 @@ const fs = require('fs')
 var Publicacoes = require('../controllers/publicacoes')
 var Publicacao = require('../models/publicacoes')
 var Ficheiro = require('../models/ficheiros')
-
+var Comentario = require('../models/comentarios')
 
 var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
+
+// Obter publicações por id
+
+router.get('/:id', function (req, res) {
+    Publicacoes.filtar(req.params.id)
+        .then(dados => res.jsonp(dados))
+        .catch(erro => res.status(500).jsonp(erro))
+})
+
+// GET PUBLICAÇÕES
 
 router.get('/', function (req, res) {
     if (req.query.utilizador) {
@@ -31,15 +41,9 @@ router.get('/', function (req, res) {
     }
 })
 
-router.get('/:id', function (req, res) {
-    Publicacoes.filtar(req.params.id)
-        .then(dados => res.jsonp(dados))
-        .catch(erro => res.status(500).jsonp(erro))
-})
+// INSERÇÃO DE PUBLICAÇÃO
 
 router.post('/', upload.array('ficheiro'), function (req, res) {
-    //console.log(req.files)
-    //console.log(req.body)
 
     var ficheiros = []
     var data = new Date()
@@ -107,5 +111,40 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
     })
 
 */
+
+// Adição de Comentário
+
+router.post('/adicionarComentario', function (req, res) {
+    if (req.body.pubid != undefined) {
+        var date = new Date();
+
+        var comentario = new Comentario(
+            {
+                conteudo: req.body.conteudo,
+                utilizador: req.body.utilizadorid,
+                data: date.toISOString()
+            })
+        console.log(comentario)
+
+        Publicacoes.adicionarComentario(comentario, req.body.pubid)
+            .then(dados => res.jsonp(dados))
+            .catch(e => res.status(500).jsonp(e))
+    } else {
+        res.status(500).jsonp({ "status": "erro", "msg": "Ups, algo correu mal!" })
+    }
+})
+
+
+// Remove comentário
+
+router.post('/removeComentario', function (req, res) {
+    if (req.body.comid != undefined && req.body.pubid != undefined) {
+        Publicacoes.removerComentario(req.body.comid, req.body.pubid)
+            .then(dados => res.jsonp(dados))
+            .catch(e => res.status(500).jsonp(e))
+    } else {
+        res.status(500).jsonp({ "status": "erro", "msg": "Ups, algo correu mal!" })
+    }
+})
 
 module.exports = router;
