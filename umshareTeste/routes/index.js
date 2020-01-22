@@ -21,13 +21,13 @@ router.get('/feed', verificaAutenticacao, function(req, res) {
   axios.get('http://localhost:5003/publicacoes/user/' + req.user.email)
     .then(dados => res.render('index', {publicacoes: dados.data}))
     .catch(erro => console.log(erro))
+    //publicacoesx = [];
+    //res.render('index', {publicacoes:publicacoesx})
 });
 
 /*router.get('/register', function(req, res) {
   res.render('register');
 });*/
-
-
 
 router.get('/logout', verificaAutenticacao, function(req,res){
   req.logout()

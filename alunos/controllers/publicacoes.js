@@ -10,7 +10,7 @@ module.exports.listar = () => {
 
 // Listar por grupo
 
-module.exports.filtrar = grupoid => {
+module.exports.filtrarPorGrupo = grupoid => {
     return Publicacao
         .findOne({ grupo: grupoid })
         .exec()
@@ -18,9 +18,9 @@ module.exports.filtrar = grupoid => {
 
 // Listar por utilizador
 
-module.exports.filtrar = utilizadorid => {
+module.exports.filtrarPorUser = utilizadorid => {
     return Publicacao
-        .findOne({ utilizador: utilizadorid })
+        .find({ utilizador: utilizadorid })
         .exec()
 }
 
