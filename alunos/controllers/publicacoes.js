@@ -17,28 +17,18 @@ module.exports.filtrar = pid => {
 
 // Listar por grupo
 
-<<<<<<< HEAD
-module.exports.filtrarPorGrupo = grupoid => {
-=======
-module.exports.filtrar_grupo = grupo => {
->>>>>>> f6b7c7136f091adc72ff47e8b6b65e0d30a5cf47
+
+module.exports.filtrar_grupo = grupoid => {
     return Publicacao
-        .findOne({ grupo: grupo })
+        .findOne({ grupo: grupoid })
         .exec()
 }
 
 // Listar por utilizador
 
-<<<<<<< HEAD
-module.exports.filtrarPorUser = utilizadorid => {
+module.exports.filtrar_utilizador = utilizadorid => {
     return Publicacao
         .find({ utilizador: utilizadorid })
-=======
-module.exports.filtrar_utilizador = utilizador => {
-    return Publicacao
-        .findOne({ utilizador: utilizador })
->>>>>>> f6b7c7136f091adc72ff47e8b6b65e0d30a5cf47
-        .exec()
 }
 
 // Listar por metadata?
