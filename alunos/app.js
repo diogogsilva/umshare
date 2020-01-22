@@ -13,6 +13,7 @@ var eventosRouter = require('./routes/eventos');
 var utilizadoresRouter = require('./routes/utilizadores');
 var ficheirosRouter = require('./routes/ficheiros');
 var publicacoesRouter = require('./routes/publicacoes');
+var gruposRouter = require('./routes/grupos');
 
 //atutenticação com JWT
 var passport = require('passport')
@@ -60,6 +61,7 @@ app.use('/eventos', eventosRouter)
 app.use('/utilizadores', utilizadoresRouter);
 app.use('/ficheiros', publicacoesRouter);
 app.use('/publicacoes', publicacoesRouter);
+app.use('/grupos', gruposRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

@@ -5,7 +5,13 @@ module.exports.listar = () => {
         .exec()
 }
 
-module.exports.filtrar = grupo => {
+module.exports.filtrarPorUser = id => {
+    return Publicacao
+        .find({utilizador: id})
+        .exec()
+}
+
+module.exports.filtrarPorGrupo = grupo => {
     return Publicacao
         .findOne({ grupo: grupo })
         .exec()

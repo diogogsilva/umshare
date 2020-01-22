@@ -19,7 +19,13 @@ router.get('/', function (req, res) {
 })
 
 router.get('/:gid', function (req, res) {
-    Publicacoes.filtar(req.params.gid)
+    Publicacoes.filtrarPorGrupo(req.params.gid)
+        .then(dados => res.jsonp(dados))
+        .catch(erro => res.status(500).jsonp(erro))
+})
+
+router.get('/user/:uid', function (req, res) {
+    Publicacoes.filtrarPorUser(req.params.uid)
         .then(dados => res.jsonp(dados))
         .catch(erro => res.status(500).jsonp(erro))
 })
@@ -43,15 +49,15 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
         }
     }
     let novaPublicacao = new Publicacao(
-        {
-            conteudo: req.body.conteudo,
-            ficheiros: ficheiros,
-            tipo: "?",
-            utilizador: "123",
-            metadata: metad,
-            grupo: "123",
-            data: data.toISOString()
-        })
+    {
+        conteudo: req.body.conteudo,
+        ficheiros: ficheiros,
+        tipo: "?",
+        utilizador: "123",
+        metadata: metad,
+        grupo: "123",
+        data: data.toISOString()
+    })
     //console.log(ficheiros)
     Publicacoes.inserir(novaPublicacao)
         .then(dados => {
