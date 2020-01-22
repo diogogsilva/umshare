@@ -4,30 +4,16 @@ var axios = require('axios')
 var passport = require('passport')
 var bcrypt = require('bcryptjs')
 
-
-/* GET home page. */
-/*router.get('/', function(req, res) {
-  res.render('login');
-});*/
 router.get('/', verificaAutenticacao, function(req, res) {
-  /*axios.get('http://localhost:5003')
-    then(dados => res.render('index', {lista: dados.data}))
-    .catch(e => res.render('error', {error: e}))*/
     res.redirect('/feed')
     
 });
 
 router.get('/feed', verificaAutenticacao, function(req, res) {
-  axios.get('http://localhost:5003/publicacoes/user/' + req.user.email)
+  axios.get('http://localhost:5003/publicacoes?utilizador=' + req.user.email)
     .then(dados => res.render('index', {publicacoes: dados.data}))
     .catch(erro => console.log(erro))
 });
-
-/*router.get('/register', function(req, res) {
-  res.render('register');
-});*/
-
-
 
 router.get('/logout', verificaAutenticacao, function(req,res){
   req.logout()
@@ -63,9 +49,7 @@ router.post('/reg', function(req,res){
 
 function verificaAutenticacao(req,res,next){
   if(req.isAuthenticated()){
-  //req.isAuthenticated() will return true if user is logged in
     console.log("verificou a autenticação!")
-    //res.redirect("/feed");
     next();
   } else{
     console.log("não verificou a autenticação!")

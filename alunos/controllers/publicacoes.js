@@ -16,6 +16,7 @@ module.exports.filtrar = pid => {
 
 // Listar por grupo
 
+
 module.exports.filtrar_grupo = grupo => {
     return Publicacao
         .find({ grupo: grupo })

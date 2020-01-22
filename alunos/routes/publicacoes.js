@@ -79,7 +79,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
                     __dirname + "/../public/ficheiros/" + dados._id,
                     {
                         recursive: true,
-                        mode: 0o77
+                        mode: 0o777
                     },
                     err => {
                         if (err) {
