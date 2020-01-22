@@ -4,7 +4,7 @@ var comentarioSchema = new mongoose.Schema({
     conteudo: { type: String },
     utilizador: { type: String },
     data: { type: String }
-})
+});
 
 var ficheiroSchema = new mongoose.Schema({
     designacao: { type: String },

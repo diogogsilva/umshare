@@ -11,13 +11,28 @@ var upload = multer({ dest: 'uploads/' })
 
 
 router.get('/', function (req, res) {
-    Publicacoes.listar()
-        .then(dados => res.jsonp(dados))
-        .catch(erro => res.status(500).jsonp(erro))
+    if (req.query.utilizador) {
+        Publicacoes.filtrar_utilizador(req.query.utilizador)
+            .then(dados => res.jsonp(dados))
+            .catch(erro => res.status(500).jsonp(erro))
+    } else if (req.query.grupo) {
+        Publicacoes.filtrar_grupo(req.query.grupo)
+            .then(dados => res.jsonp(dados))
+            .catch(erro => res.status(500).jsonp(erro))
+    } else if (req.query.metadata) {
+        Publicacoes.filtrar_metadata(req.query.metadata)
+            .then(dados => res.jsonp(dados))
+            .catch(erro => res.status(500).jsonp(erro))
+    }
+    else {
+        Publicacoes.listar()
+            .then(dados => res.jsonp(dados))
+            .catch(erro => res.status(500).jsonp(erro))
+    }
 })
 
-router.get('/:gid', function (req, res) {
-    Publicacoes.filtar(req.params.gid)
+router.get('/:id', function (req, res) {
+    Publicacoes.filtar(req.params.id)
         .then(dados => res.jsonp(dados))
         .catch(erro => res.status(500).jsonp(erro))
 })
