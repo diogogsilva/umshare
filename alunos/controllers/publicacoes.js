@@ -1,5 +1,4 @@
 var Publicacao = require('../models/publicacoes')
-var Comentario = require('../models/publicacoes')
 
 // listar todos
 
@@ -19,7 +18,7 @@ module.exports.filtrar = pid => {
 
 module.exports.filtrar_grupo = grupo => {
     return Publicacao
-        .findOne({ grupo: grupo })
+        .find({ grupo: grupo })
         .exec()
 }
 
@@ -27,7 +26,7 @@ module.exports.filtrar_grupo = grupo => {
 
 module.exports.filtrar_utilizador = utilizador => {
     return Publicacao
-        .findOne({ utilizador: utilizador })
+        .find({ utilizador: utilizador })
         .exec()
 }
 
@@ -47,6 +46,12 @@ module.exports.inserir = pub => {
     return novaPublicacao.save()
 }
 
+module.exports.remover = pid => {
+    return Publicacao
+        .deleteOne({ _id: pid })
+        .exec()
+}
+
 // Inserção de comentário
 
 module.exports.adicionarComentario = (com, pubid) => {
@@ -56,6 +61,6 @@ module.exports.adicionarComentario = (com, pubid) => {
 
 module.exports.removerComentario = (comid, pubid) => {
     return Publicacao
-        .update({ "_id": pubid }, { $pull: { "comentarios": comid } })
+        .findOneAndUpdate({ "_id": pubid }, { $pull: { comentarios: { _id: comid } } })
 }
 

@@ -10,10 +10,10 @@ var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
 
 
-// Obter publicações por id
+// Obter publicação por id
 
 router.get('/:id', function (req, res) {
-    Publicacoes.filtar(req.params.id)
+    Publicacoes.filtrar(req.params.id)
         .then(dados => res.jsonp(dados))
         .catch(erro => res.status(500).jsonp(erro))
 })
@@ -44,12 +44,12 @@ router.get('/', function (req, res) {
 // INSERÇÃO DE PUBLICAÇÃO
 
 router.post('/', upload.array('ficheiro'), function (req, res) {
-
-    var ficheiros = []
+    console.log(req.files)
     var data = new Date()
     var metad = req.body.metadata.split(',')
 
     if (req.files.length > 0) {
+        var ficheiros = []
         for (var i = 0; i < req.files.length; i++) {
             let novoFicheiro = new Ficheiro(
                 {
@@ -112,9 +112,18 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
 
 */
 
+// Remover publicação 
+
+router.delete('/:id', function (req, res) {
+    Publicacoes.remover(req.params.id)
+        .then(dados => res.jsonp(dados))
+        .catch(e => res.status(500).jsonp(e))
+})
+
 // Adição de Comentário
 
 router.post('/adicionarComentario', function (req, res) {
+    // if ?? 
     if (req.body.pubid != undefined) {
         var date = new Date();
 
