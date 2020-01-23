@@ -16,7 +16,7 @@ router.get('/feed', verificaAutenticacao, function(req, res) {
 
 router.get('/grupos', verificaAutenticacao, function(req, res) {
   axios.get('http://localhost:5003/grupos')
-    .then(dados => res.json(dados.data))//res. res.render('grupos', {grupos: dados.data}))
+    .then(dados => res.json(dados.data))
     .catch(erro => console.log(erro))
 });
 
@@ -33,31 +33,42 @@ router.get('/register', function(req,res){
   res.render('register')
 })
 
-router.post('/login', passport.authenticate('local', 
-  { successRedirect: '/',
-    successFlash: 'Utilizador autenticado com sucesso!',
-    failureRedirect: '/',
-    failureFlash: 'Utilizador ou password inválido(s)...'
+/*router.post('/login', passport.authenticate('local'), function(req, res) {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    res.jsonp({"status": "ok","msg":"Login com sucesso!"})
+  }
+);*/
+router.post('/login', passport.authenticate('local', {
+  successRedirect: '/login',
+  successFlash: 'Utilizador autenticado com sucesso!',
+  failureRedirect: '/erro',
+  failureFlash: 'Utilizador ou password inválido(s)...'
   })
 )
+  /*{ successRedirect: '/',
+    successFlash: 'Utilizador autenticado com sucesso!',
+    failureRedirect: '/login',
+    failureFlash: 'Utilizador ou password inválido(s)...'
+  })
+)*/
 
 router.post('/reg', function(req,res){
   var hash = bcrypt.hashSync(req.body.password, 10);
-  axios.get('http://localhost:5003/utilizadores/' + req.body.email)
+  axios.get('http://localhost:5003/utilizadores/verify/' + req.body.email)
     .then(dados => {
       if(dados.data != undefined) {
-        alert('USER JÁ EXISTE');
+        res.jsonp({"status": "erro","msg":"Email já em uso!"})
       } else {
-        alert('USER NÃO EXISTE');
+        axios.post('http://localhost:5003/utilizadores', {
+          email: req.body.email,
+          nome: req.body.nome,
+          password: hash
+        })
+        .then(dados => res.redirect("/login"))//res.jsonp({"status": "ok","msg":"Registado com sucesso!"}))
+        .catch(e => res.render('error', {error: e}))
       }
     })
-  /*axios.post('http://localhost:5003/utilizadores', {
-    email: req.body.email,
-    nome: req.body.nome,
-    password: hash
-  })
-    .then(dados => res.redirect('/'))
-    .catch(e => res.render('error', {error: e}))*/
 })
 
 function verificaAutenticacao(req,res,next){

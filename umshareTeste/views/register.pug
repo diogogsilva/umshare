@@ -2,25 +2,31 @@ extends layout
 
 block content
   body.w3-container
-    form(action="/reg" method="POST")
+    div.alert.w3-red(id="divAlertWarning" style="opacity:0")
+      span.closebtn &times;
+      strong(id="msgWarning")
+    //div.alert.success(id="divAlertSuccess" style="opacity:0")
+      span.closebtn &times;
+      strong(id="msgSuccess")
+    form(action="/reg" method="POST" id="formRegisto")
       .w3-center
           img.w3-circle.w3-margin-top.w3-center(src='/images/logo.png' alt='Logo' style='width:10%')
       .w3-container
           .w3-section
               label
               b Nome
-              input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' name="nome" placeholder='Enter Name')
+              input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' name="nome" placeholder='Enter Name' required)
               label
               b Email
-              input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' name="email" placeholder='Enter Email')
+              input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' name="email" placeholder='Enter Email' required)
               label
               b Password
-              input.w3-input.w3-border.w3-hover-border-black(type='password' name="password" placeholder='Enter Password')
+              input.w3-input.w3-border.w3-hover-border-black(type='password' name="password" placeholder='Enter Password' required)
               //input.w3-check(type='checkbox' checked='checked')
               //|  Remember me
           .w3-container.w3-border-top.w3-padding-16.w3-light-grey
               input(type="submit" value="Enviar")
               span.w3-right.w3-padding.w3-hide-small
-                  | Already have an account? 
-                  a(href='http://localhost:2222/') Back to Login
+                  | Já está registado? 
+                  a(href='http://localhost:2222/') Fazer Login
 
