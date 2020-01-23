@@ -5,19 +5,18 @@ var passport = require('passport')
 var bcrypt = require('bcryptjs')
 
 router.get('/', verificaAutenticacao, function(req, res) {
-    res.redirect('/feed')
-    
+    res.render('index')
 });
 
 router.get('/feed', verificaAutenticacao, function(req, res) {
   axios.get('http://localhost:5003/publicacoes?utilizador=' + req.user.email)
-    .then(dados => res.render('index', {publicacoes: dados.data}))
+    .then(dados => res.json(dados.data))
     .catch(erro => console.log(erro))
 });
 
 router.get('/grupos', verificaAutenticacao, function(req, res) {
   axios.get('http://localhost:5003/grupos')
-    .then(dados => res.render('grupos', {grupos: dados.data}))
+    .then(dados => res.json(dados.data))//res. res.render('grupos', {grupos: dados.data}))
     .catch(erro => console.log(erro))
 });
 
