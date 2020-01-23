@@ -15,6 +15,12 @@ router.get('/feed', verificaAutenticacao, function(req, res) {
     .catch(erro => console.log(erro))
 });
 
+router.get('/grupos', verificaAutenticacao, function(req, res) {
+  axios.get('http://localhost:5003/grupos')
+    .then(dados => res.render('grupos', {grupos: dados.data}))
+    .catch(erro => console.log(erro))
+});
+
 router.get('/logout', verificaAutenticacao, function(req,res){
   req.logout()
   res.redirect('/')
@@ -38,13 +44,21 @@ router.post('/login', passport.authenticate('local',
 
 router.post('/reg', function(req,res){
   var hash = bcrypt.hashSync(req.body.password, 10);
-  axios.post('http://localhost:5003/utilizadores', {
+  axios.get('http://localhost:5003/utilizadores/' + req.body.email)
+    .then(dados => {
+      if(dados.data != undefined) {
+        alert('USER JÁ EXISTE');
+      } else {
+        alert('USER NÃO EXISTE');
+      }
+    })
+  /*axios.post('http://localhost:5003/utilizadores', {
     email: req.body.email,
     nome: req.body.nome,
     password: hash
   })
     .then(dados => res.redirect('/'))
-    .catch(e => res.render('error', {error: e}))
+    .catch(e => res.render('error', {error: e}))*/
 })
 
 function verificaAutenticacao(req,res,next){
