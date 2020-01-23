@@ -40,12 +40,15 @@ $(function () {
                     document.getElementById('divAlertWarning').style.display = 'block';
                     setTimeout(function(){ document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
                 } else {
-                    /*$('.alert').css({display: 'none'});
+                    $('.alert').css({display: 'none'});
                     $('#msgSuccess').html(response.msg);
                     $('#divAlertSuccess').css({ opacity: 1 });
                     document.getElementById('divAlertSuccess').style.display = 'block';
-                    setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);*/
-                    window.location.href = "/login";
+                    setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+                    setTimeout(function () {
+                        window.location.href = "/login";
+                    }, 3000);
+                    
                 }
             }
         });

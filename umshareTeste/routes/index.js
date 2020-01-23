@@ -33,12 +33,6 @@ router.get('/register', function(req,res){
   res.render('register')
 })
 
-/*router.post('/login', passport.authenticate('local'), function(req, res) {
-    // If this function gets called, authentication was successful.
-    // `req.user` contains the authenticated user.
-    res.jsonp({"status": "ok","msg":"Login com sucesso!"})
-  }
-);*/
 router.post('/login', passport.authenticate('local', {
   successRedirect: '/login',
   successFlash: 'Utilizador autenticado com sucesso!',
@@ -46,12 +40,6 @@ router.post('/login', passport.authenticate('local', {
   failureFlash: 'Utilizador ou password inválido(s)...'
   })
 )
-  /*{ successRedirect: '/',
-    successFlash: 'Utilizador autenticado com sucesso!',
-    failureRedirect: '/login',
-    failureFlash: 'Utilizador ou password inválido(s)...'
-  })
-)*/
 
 router.post('/reg', function(req,res){
   var hash = bcrypt.hashSync(req.body.password, 10);
@@ -65,7 +53,7 @@ router.post('/reg', function(req,res){
           nome: req.body.nome,
           password: hash
         })
-        .then(dados => res.redirect("/login"))//res.jsonp({"status": "ok","msg":"Registado com sucesso!"}))
+        .then(dados => res.jsonp({"status": "ok","msg":"Registado com sucesso!"}))
         .catch(e => res.render('error', {error: e}))
       }
     })
