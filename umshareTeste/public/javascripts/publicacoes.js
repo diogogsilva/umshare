@@ -9,6 +9,7 @@ $(function () {
 
         $('#f1').append(ficheiroInput)
     })
+
     var close = document.getElementsByClassName("closebtn");
     var i;
 
@@ -20,7 +21,64 @@ $(function () {
         }
     }
 
-    setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+    $("#formRegisto").submit(function(e) {
+
+        e.preventDefault();
+    
+        var form = $(this);
+        var url = form.attr('action');
+    
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            success: function(response) {
+                if(response.status == 'erro') {
+                    $('.alert').css({display: 'none'});
+                    $('#msgWarning').html(response.msg);
+                    $('#divAlertWarning').css({ opacity: 1 });
+                    document.getElementById('divAlertWarning').style.display = 'block';
+                    setTimeout(function(){ document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
+                } else {
+                    /*$('.alert').css({display: 'none'});
+                    $('#msgSuccess').html(response.msg);
+                    $('#divAlertSuccess').css({ opacity: 1 });
+                    document.getElementById('divAlertSuccess').style.display = 'block';
+                    setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);*/
+                    window.location.href = "/login";
+                }
+            }
+        });
+    
+    
+    });
+
+    $("#formLogin").submit(function(e) {
+        e.preventDefault();
+
+        var form = $(this);
+        var url = form.attr('action');
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: form.serialize(),
+            complete: function(xhr, textStatus) {
+                if(xhr.status != 200) {
+                    $('.alert').css({display: 'none'});
+                    $('#msgWarning').html("Credenciais inválidas!");
+                    $('#divAlertWarning').css({ opacity: 1 });
+                    document.getElementById('divAlertWarning').style.display = 'block';
+                    setTimeout(function(){ document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
+                } else {
+                    window.location.href = '/';
+                }
+            } 
+        });
+
+    })
+
+    //setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
 
     /*
         $.ajax({

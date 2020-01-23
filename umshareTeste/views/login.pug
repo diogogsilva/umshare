@@ -2,22 +2,25 @@ extends layout
 
 block content
   body.w3-container
-    form(action="/login" method="POST")
+    div.alert.w3-red(id="divAlertWarning" style="opacity:0")
+        span.closebtn &times;
+        strong(id="msgWarning")
+    form(action="/login" method="POST" id="formLogin")
         .w3-center
             img.w3-circle.w3-margin-top.w3-center(src='/images/logo.png' alt='Avatar' style='width:10%')
         .w3-container
             .w3-section
                 label
                 b Email
-                input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' name="email" placeholder='Enter Email')
+                input.w3-input.w3-border.w3-hover-border-black.w3-margin-bottom(type='text' name="email" placeholder='Introduza o seu email')
                 label
                 b Password
-                input.w3-input.w3-border.w3-hover-border-black(type='password' name="password" placeholder='Enter Password')
+                input.w3-input.w3-border.w3-hover-border-black(type='password' name="password" placeholder='Introduza a password')
                 //input.w3-check(type='checkbox' checked='checked')
                 //|  Remember me
             .w3-container.w3-border-top.w3-padding-16.w3-light-grey
                 input(type="submit" value="Enviar")
                 span.w3-right.w3-padding.w3-hide-small
-                    | Don't have an account? 
-                    a(href='http://localhost:2222/register') Register
+                    | Não está registado? 
+                    a(href='http://localhost:2222/register') Registar
 
