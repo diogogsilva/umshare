@@ -21,7 +21,7 @@ block content
       .topnav
         a.active(id="tabFeed") Feed
         a(id="tabGrupos") Grupos
-        a(href='#contact') Contact
+        a(id='tabPerfil') Perfil
         .search-container
           form(action='/action_page.php')
             input(type='text' placeholder='Search..' name='search')
@@ -41,6 +41,10 @@ block content
     div(id="gruposLayout")
       div(id="gruposInsertZone")
     br
+
+    div(id="perfilLayout")
+      div(id="perfilInsertZone")
+
 
   footer.w3-container.w3-dark-grey.w3-padding-32.w3-margin-top
     button.w3-button.w3-black.w3-disabled.w3-padding-large.w3-margin-bottom Previous
@@ -123,6 +127,30 @@ block content
               clone.find('#membrosGrupo').text(item.membros.length);
               clone.appendTo("#gruposInsertZone");
             })
+          });
+        }
+      });
+      $("#tabPerfil").on("click", function () {
+        if(!$('#tabPerfil').hasClass('active')){
+          $('#perfilInsertZone').empty();
+          $.ajax({
+              url: "/perfil"
+          })
+          .done(function( data ) {
+            console.log("Dados do perfil " + data);
+           /* $('#publicacoesLayout').hide();
+            $('#gruposLayout').show();
+            $('#tabFeed').removeClass('active');
+            $('#tabGrupos').addClass('active');
+            data.forEach(function(item){
+              var clone = $('#templateGrupos').clone(true);
+              clone.attr("style", "");
+              clone.find('#nomeGrupo').text(item.nome);
+              clone.find('#descricaoGrupo').text(item.descricao);
+              clone.find('#adminGrupo').text(item.admin);
+              clone.find('#membrosGrupo').text(item.membros.length);
+              clone.appendTo("#gruposInsertZone");
+            })*/
           });
         }
       });
