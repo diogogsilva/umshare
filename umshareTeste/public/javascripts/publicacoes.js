@@ -13,15 +13,16 @@ $(function () {
     var i;
 
     for (i = 0; i < close.length; i++) {
-        close[i].onclick = function(){
+        close[i].onclick = function () {
             var div = this.parentElement;
             div.style.opacity = "0";
-            setTimeout(function(){ div.style.display = "none"; }, 600);
+            setTimeout(function () { div.style.display = "none"; }, 600);
         }
     }
 
-    setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
 
+    //$('#publicacaoForm').append('<input type="text" name="user" value="' + req.user.email + '" />');
     /*
         $.ajax({
             url: e.currentTarget.action,

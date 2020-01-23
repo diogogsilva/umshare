@@ -5,6 +5,7 @@ var Publicacoes = require('../controllers/publicacoes')
 var Publicacao = require('../models/publicacoes')
 var Ficheiro = require('../models/ficheiros')
 var Comentario = require('../models/comentarios')
+var passport = require('passport')
 
 var multer = require('multer')
 var upload = multer({ dest: 'uploads/' })
@@ -44,7 +45,8 @@ router.get('/', function (req, res) {
 // INSERÇÃO DE PUBLICAÇÃO
 
 router.post('/', upload.array('ficheiro'), function (req, res) {
-    console.log(req.files)
+    //console.log(req.files)
+    console.log(req.body)
     var data = new Date()
     var metad = req.body.metadata.split(',')
 
@@ -66,7 +68,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
             conteudo: req.body.conteudo,
             ficheiros: ficheiros,
             tipo: "?",
-            utilizador: "123",
+            utilizador: req.body.utilizador,
             metadata: metad,
             grupo: "123",
             data: data.toISOString()
@@ -100,7 +102,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
             else {
                 console.log("Qualquer coisa")
             }
-            res.redirect("http://localhost:2222/feed")
+            res.redirect("http://localhost:2222/")
         })
         .catch(e => res.status(500).jsonp(e))
 })
