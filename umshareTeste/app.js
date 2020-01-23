@@ -24,7 +24,7 @@ var jwt = require('jsonwebtoken')
 // Configuração da estratégia local
 passport.use(new LocalStrategy(
   {usernameField: 'email'}, (email, password, done) => {
-    var token = jwt.sign({},"daw2019",
+    var token = jwt.sign({},"umshare",
     {
       expiresIn: 3000,
       issuer: "Servidor UMShare"
@@ -48,7 +48,7 @@ passport.serializeUser((user,done) => {
   
 // Desserialização: a partir do id obtem-se a informação do utilizador
 passport.deserializeUser((email, done) => {
-  var token = jwt.sign({},"daw2019",
+  var token = jwt.sign({},"umshare",
     {
       expiresIn: 3000,
       issuer: "Servidor MyAgenda"
@@ -74,7 +74,7 @@ app.use(session({
     return uuid()
   },
   store: new FileStore(),
-  secret: 'pri2019',
+  secret: 'umshare',
   resave: false,
   saveUninitialized: true
 }))

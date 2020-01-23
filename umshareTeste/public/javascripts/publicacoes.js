@@ -81,8 +81,6 @@ $(function () {
 
     })
 
-    //setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
-
     /*
         $.ajax({
             url: e.currentTarget.action,

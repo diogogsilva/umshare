@@ -1,3 +1,7 @@
+.topnav a {
+  cursor: pointer;
+}
+
 /* notification status */
 .alert {
   padding: 20px;
