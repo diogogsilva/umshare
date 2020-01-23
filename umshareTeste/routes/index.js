@@ -3,6 +3,7 @@ var router = express.Router();
 var axios = require('axios')
 var passport = require('passport')
 var bcrypt = require('bcryptjs')
+var jwt = require('jsonwebtoken')
 
 router.get('/', verificaAutenticacao, function (req, res) {
   res.render('index', { user: req.user.email })
@@ -16,6 +17,17 @@ router.get('/feed', verificaAutenticacao, function (req, res) {
 
 router.get('/grupos', verificaAutenticacao, function (req, res) {
   axios.get('http://localhost:5003/grupos')
+    .then(dados => res.json(dados.data))
+    .catch(erro => console.log(erro))
+});
+
+router.get('/perfil', verificaAutenticacao, function (req, res) {
+  var token = jwt.sign({}, "umshare",
+    {
+      expiresIn: 3000,
+      issuer: "Servidor UMShare"
+    })
+  axios.get('http://localhost:5003/utilizadores/' + req.user.email + "?token=" + token)
     .then(dados => res.json(dados.data))
     .catch(erro => console.log(erro))
 });
@@ -42,8 +54,13 @@ router.post('/login', passport.authenticate('local', {
 )
 
 router.post('/reg', function (req, res) {
+  var token = jwt.sign({}, "umshare",
+    {
+      expiresIn: 3000,
+      issuer: "Servidor UMShare"
+    })
   var hash = bcrypt.hashSync(req.body.password, 10);
-  axios.get('http://localhost:5003/utilizadores/verify/' + req.body.email)
+  axios.get('http://localhost:5003/utilizadores/' + req.body.email + "?token=" + token)
     .then(dados => {
       if (dados.data != undefined) {
         res.jsonp({ "status": "erro", "msg": "Email já em uso!" })

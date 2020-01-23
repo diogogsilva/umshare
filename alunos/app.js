@@ -33,7 +33,7 @@ var extractFromBody = function (req) {
 }
 
 passport.use(new JWTStrategy({
-  secretOrKey: 'daw2019',
+  secretOrKey: 'umshare',
   jwtFromRequest: ExtraJWT.fromExtractors([extractFromQS, extractFromBody])
 }, async (payload, done) => {
   try {

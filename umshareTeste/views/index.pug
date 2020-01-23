@@ -21,7 +21,7 @@ block content
       .topnav
         a.active(id="tabFeed") Feed
         a(id="tabGrupos") Grupos
-        a(id='tabPerfil') Perfil
+        a(id="tabPerfil") Perfil
         .search-container
           form(action='/action_page.php')
             input(type='text' placeholder='Search..' name='search')
@@ -42,7 +42,6 @@ block content
 
     div(id="gruposLayout")
       div(id="gruposInsertZone")
-    br
 
     div(id="perfilLayout")
       div(id="perfilInsertZone")
@@ -80,6 +79,15 @@ block content
               h5
                 p(id="membrosGrupo")
 
+      .w3-row(id="templatePerfil" style="display:none")
+        .w3-col.l8.s12
+          .w3-card-4.w3-margin.w3-white
+            .w3-container
+              h3
+                p(id="nomePerfil")
+              h5
+                p(id="emailPerfil")
+
   script.
     $(document).ready(function () {
       function showTabFeed() {
@@ -90,8 +98,10 @@ block content
         .done(function( data ) {
           $('#gruposLayout').hide();
           $('#publicacoesLayout').show();
+          $('#perfilLayout').hide();
           $('#tabGrupos').removeClass('active');
           $('#tabFeed').addClass('active');
+          $('#tabPerfil').removeClass('active');
           data.forEach(function(item){
             var clone = $('#templatePublicacoes').clone(true);
             clone.attr("style", "");
@@ -116,8 +126,10 @@ block content
           .done(function( data ) {
             $('#publicacoesLayout').hide();
             $('#gruposLayout').show();
+            $('#perfilLayout').hide();
             $('#tabFeed').removeClass('active');
             $('#tabGrupos').addClass('active');
+            $('#tabPerfil').removeClass('active');
             data.forEach(function(item){
               var clone = $('#templateGrupos').clone(true);
               clone.attr("style", "");
@@ -137,20 +149,17 @@ block content
               url: "/perfil"
           })
           .done(function( data ) {
-            console.log("Dados do perfil " + data);
-           /* $('#publicacoesLayout').hide();
-            $('#gruposLayout').show();
+            $('#publicacoesLayout').hide();
+            $('#gruposLayout').hide();
+            $('#perfilLayout').show();
             $('#tabFeed').removeClass('active');
-            $('#tabGrupos').addClass('active');
-            data.forEach(function(item){
-              var clone = $('#templateGrupos').clone(true);
-              clone.attr("style", "");
-              clone.find('#nomeGrupo').text(item.nome);
-              clone.find('#descricaoGrupo').text(item.descricao);
-              clone.find('#adminGrupo').text(item.admin);
-              clone.find('#membrosGrupo').text(item.membros.length);
-              clone.appendTo("#gruposInsertZone");
-            })*/
+            $('#tabGrupos').removeClass('active');
+            $('#tabPerfil').addClass('active');
+            var clone = $('#templatePerfil').clone(true);
+            clone.attr("style", "");
+            clone.find('#nomePerfil').text(data.nome);
+            clone.find('#emailPerfil').text(data.email);
+            clone.appendTo("#perfilInsertZone");
           });
         }
       });
