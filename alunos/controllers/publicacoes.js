@@ -28,6 +28,7 @@ module.exports.filtrar_grupo = grupo => {
 module.exports.filtrar_utilizador = utilizador => {
     return Publicacao
         .find({ utilizador: utilizador })
+        .sort({ "data": - 1 })
         .exec()
 }
 
