@@ -70,7 +70,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
             tipo: "?",
             utilizador: req.body.utilizador,
             metadata: metad,
-            grupo: "123",
+            grupo: req.body.grupo,
             data: data.toISOString()
         })
     //console.log(ficheiros)
@@ -102,7 +102,6 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
             else {
                 console.log("Qualquer coisa")
             }
-            res.redirect("http://localhost:2222/")
         })
         .catch(e => res.status(500).jsonp(e))
 })

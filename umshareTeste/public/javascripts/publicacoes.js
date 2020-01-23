@@ -40,12 +40,15 @@ $(function () {
                     document.getElementById('divAlertWarning').style.display = 'block';
                     setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
                 } else {
-                    /*$('.alert').css({display: 'none'});
+                    $('.alert').css({ display: 'none' });
                     $('#msgSuccess').html(response.msg);
                     $('#divAlertSuccess').css({ opacity: 1 });
                     document.getElementById('divAlertSuccess').style.display = 'block';
-                    setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);*/
-                    window.location.href = "/login";
+                    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+                    setTimeout(function () {
+                        window.location.href = "/login";
+                    }, 3000);
+
                 }
             }
         });
@@ -77,25 +80,27 @@ $(function () {
         });
 
     })
-    /*
-    $("#formPublicacao").submit(function (e) {
+
+    $("#publicacaoForm").submit(function (e) {
         e.preventDefault();
 
         var form = $(this);
         var url = form.attr('action');
 
+        console.log(form.serialize())
         $.ajax({
             type: "POST",
             url: url,
             data: form.serialize(),
             complete: function (xhr, textStatus) {
                 if (xhr.status != 200) {
+                    /*
                     $('.alert').css({ display: 'none' });
-                    $('#msgWarning').html("Qualquer coisa");
+                    $('#msgWarning').html("Campos por preencher!");
                     $('#divAlertWarning').css({ opacity: 1 });
                     document.getElementById('divAlertWarning').style.display = 'block';
-                    $('#publicacaoForm').append('<input type="text" name="teste" value="teste" />');
-                    setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
+                    setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);*/
+                    console.log("Nem sei")
                 } else {
                     window.location.href = '/';
                 }
@@ -106,16 +111,4 @@ $(function () {
 
     //setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
 
-    
-        $.ajax({
-            url: e.currentTarget.action,
-            type: 'post',
-            dataType: 'application/json',
-            data: $("#publicacaoForm").serialize(),
-            success: function (data) {
-                window.location.href = 'http://localhost:2222/feed'
-            }
-        });
-    
-        */
 })

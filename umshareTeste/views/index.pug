@@ -21,7 +21,7 @@ block content
       .topnav
         a.active(id="tabFeed") Feed
         a(id="tabGrupos") Grupos
-        a(href='#contact') Contact
+        a(id='tabPerfil') Perfil
         .search-container
           form(action='/action_page.php')
             input(type='text' placeholder='Search..' name='search')
@@ -31,10 +31,11 @@ block content
       form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoForm").w3-container.w3-center.w3-padding-16.w3-border.w3-border-indigo
         h4.w3-left Publicação
         input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
-        input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="conteudo" placeholder="Texto")
-        input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="utilizador" value=user)         
+        input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto")
+        input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="utilizador" value=user)
+        input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="grupo" value='')        
         .w3-cell-row(id="f1")
-          input.w3-input.w3-cell(type="file" name="ficheiro")
+          input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")
         button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfile') Adicionar outro ficheiro
         input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
       div(id="publicacoesInsertZone")
@@ -42,6 +43,10 @@ block content
     div(id="gruposLayout")
       div(id="gruposInsertZone")
     br
+
+    div(id="perfilLayout")
+      div(id="perfilInsertZone")
+
 
   footer.w3-container.w3-dark-grey.w3-padding-32.w3-margin-top
     p
@@ -122,6 +127,30 @@ block content
               clone.find('#membrosGrupo').text(item.membros.length);
               clone.appendTo("#gruposInsertZone");
             })
+          });
+        }
+      });
+      $("#tabPerfil").on("click", function () {
+        if(!$('#tabPerfil').hasClass('active')){
+          $('#perfilInsertZone').empty();
+          $.ajax({
+              url: "/perfil"
+          })
+          .done(function( data ) {
+            console.log("Dados do perfil " + data);
+           /* $('#publicacoesLayout').hide();
+            $('#gruposLayout').show();
+            $('#tabFeed').removeClass('active');
+            $('#tabGrupos').addClass('active');
+            data.forEach(function(item){
+              var clone = $('#templateGrupos').clone(true);
+              clone.attr("style", "");
+              clone.find('#nomeGrupo').text(item.nome);
+              clone.find('#descricaoGrupo').text(item.descricao);
+              clone.find('#adminGrupo').text(item.admin);
+              clone.find('#membrosGrupo').text(item.membros.length);
+              clone.appendTo("#gruposInsertZone");
+            })*/
           });
         }
       });
