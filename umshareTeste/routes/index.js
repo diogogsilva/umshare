@@ -62,10 +62,10 @@ router.post('/publicacao', function (req, res) {
     utilizador: req.body.utilizador,
     grupo: req.body.grupo,
     ficheiro: req.files*/
-    /*data: req
-  })
-  .then(dados => console.log(dados))//res.jsonp({ "status": "ok", "msg": "Publicação criada com sucesso!" }))
-  .catch(e => console.log(e))//res.render('error', { error: e }))*/
+  /*data: req
+})
+.then(dados => console.log(dados))//res.jsonp({ "status": "ok", "msg": "Publicação criada com sucesso!" }))
+.catch(e => console.log(e))//res.render('error', { error: e }))*/
 })
 
 router.post('/reg', function (req, res) {
@@ -89,6 +89,24 @@ router.post('/reg', function (req, res) {
           .catch(e => res.render('error', { error: e }))
       }
     })
+})
+
+router.post('/comentar', function (req, res) {
+  console.log(req.body)
+  console.log(req.user)
+
+  if (req.body.pubid == undefined)
+    console.log("Ah?")
+
+  axios.post('http://localhost:5003/publicacoes/adicionarComentario', {
+    pubid: req.body.pubid,
+    conteudo: req.body.conteudo,
+    utilizadorid: req.user._id,
+  })
+    .then(dados => {
+      res.jsonp({ "status": "ok", "msg": "Comentário inserido!" })
+    })
+    .catch(e => res.render('error', { error: e }))
 })
 
 function verificaAutenticacao(req, res, next) {

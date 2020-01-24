@@ -58,17 +58,36 @@ block content
 
 
       .w3-row(id="templatePublicacoes" style="display:none")
-        .w3-col.l8.s12
-          .w3-card-4.w3-margin.w3-white
-            .w3-container
-              h3
-                p(id="conteudoPub")
-              h5
-                p(id="metadataPub")
-              h5
-                //each file in pub.ficheiros
-                  p= file.designacao
-                  p= file.dataupload
+        .w3-col.l8.s12(id="idk")
+          .w3-card-4.w3-margin.w3-white(id="t")
+
+        
+      .w3-card-4.w3-padding.w3-margin-bottom(id="pub" style="display:none")
+        h5
+          p(id="metadataPub")
+        h3
+          p(id="conteudoPub")
+        h5
+          p(id="dataPub")
+          //each file in pub.ficheiros
+            p= file.designacao
+            p= file.dataupload
+            
+
+      .w3-container.w3-border.w3-border-black.w3-white.w3-margin.w3-margin-bottom(id="templateComentarios" style="display:none")
+        h.w3-right.w3-margin-top(ref="") X
+        h5
+          p(id="utilizadorCom")
+        h4
+          p(id="conteudoCom")
+        h5
+          p.w3-right(id="dataCom")
+
+    form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(style="display:none" action="/comentar" method="POST" id="comentarioForm")
+      input.w3-input.w3-cell.w3-border.w3-hide(type="text" name="pubid" id="pubidForm")
+      input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário")
+      input.w3-input.w3-margin-top.w3-margin-bottom.w3-pink(type="submit" value="Comentar")
+
 
       .w3-row(id="templateGrupos" style="display:none")
         .w3-col.l8.s12
@@ -107,11 +126,39 @@ block content
           $('#tabFeed').addClass('active');
           $('#tabPerfil').removeClass('active');
           data.forEach(function(item){
-            var clone = $('#templatePublicacoes').clone(true);
-            clone.attr("style", "");
-            clone.find('#conteudoPub').text(item.conteudo);
-            clone.find('#metadataPub').text(item.metadata);
-            clone.appendTo("#publicacoesInsertZone");
+            $("#comentarioForm").attr("style", "")
+            var Clone = $('#templatePublicacoes #idk #t').clone(true);
+            var pubClone = $('#pub').clone(true);
+            console.log(item)
+            Clone.attr("style", "");
+            pubClone.attr("style", "");
+            if(item.conteudo == '') {
+              pubClone.find('#conteudoPub').text("Publicação sem mensagem");
+            } else 
+              pubClone.find('#conteudoPub').text(item.conteudo);
+            if (item.metadata == '') {
+              pubClone.find('#metadataPub').text("Publicação sem tags");
+            } else
+              pubClone.find('#metadataPub').text("Tags: "+ item.metadata);
+            pubClone.find('#dataPub').text(item.data);
+            pubClone.find('#idPub').text(item._id);
+
+            pubClone.appendTo(Clone)
+
+            if(item.comentarios.length > 0) {
+              item.comentarios.forEach(function(item){
+                var comClone = $('#templateComentarios').clone(true);
+                console.log("Entrei")
+                comClone.attr("style", "");
+                comClone.find('#conteudoCom').text(item.conteudo);
+                comClone.find('#utilizadorCom').text("Comentado por: " + item.utilizador);
+                comClone.find('#dataCom').text(item.data);
+                comClone.appendTo(Clone);
+              })
+            }
+            $("#comentarioForm #pubidForm").val(item._id);
+            $("#comentarioForm").appendTo(Clone)
+            Clone.appendTo("#publicacoesInsertZone");
           })
         });
       }
