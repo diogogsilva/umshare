@@ -101,12 +101,24 @@ $(function () {
                     $('#divAlertSuccess').css({ opacity: 1 });
                     document.getElementById('divAlertSuccess').style.display = 'block';
                     setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+                    document.getElementById("publicacaoForm").reset();
                     showTabFeed();
                 }
             }
         });
     });
 
+    $('#hidePublicacaoForm').click( function() {
+        $('#divPublicacaoForm').slideUp("slow");
+        $('#showPublicacaoForm').removeClass('w3-hide');
+        $('#hidePublicacaoForm').addClass('w3-hide');
+    })
+
+    $('#showPublicacaoForm').click( function() {
+        $('#divPublicacaoForm').slideDown("slow");
+        $('#showPublicacaoForm').addClass('w3-hide');
+        $('#hidePublicacaoForm').removeClass('w3-hide');
+    })
 
     function showTabFeed() {
         $('#publicacoesInsertZone').empty();
