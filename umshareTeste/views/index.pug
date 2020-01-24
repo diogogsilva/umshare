@@ -46,6 +46,42 @@ block content
 
     div(id="gruposLayout")
       div(id="gruposInsertZone")
+    
+    div(id="grupoLayout" style="display:none")
+      button.w3-button.w3-round-medium.w3-indigo.w3-left.w3-margin-left.w3-margin-top(id='backToGruposList') Voltar
+      .w3-row
+        .w3-col.l3
+          .w3-card.w3-margin
+            .w3-container.w3-padding.w3-dark-grey
+              h4(id="nomeGrupo")
+            .w3-container.w3-white
+              h6(id="adminGrupo")
+              p(id="descricaoGrupo")
+            .w3-container.w3-blue
+              h5 Membros
+            div.w3-container.w3-white(id="listaMembrosGrupo")
+          div(id="adminTools" style="display:none")
+            .w3-card.w3-margin
+              .w3-container.w3-padding.w3-dark-grey
+                h5 Adicionar Membros
+              .w3-container.w3-blue
+                h5 Membros
+              .w3-container.w3-white
+                form(action="/addMembro" method="POST" id="formAddMembro")
+                  input.w3-input.w3-border.w3-hover-border-black(type='email' name="idMembro" placeholder='Email...' required)
+                  input.w3-input.w3-cell.w3-border.gid(type="hidden" name="gid" value="" required)
+                  input.w3-button.w3-round-medium.w3-indigo(type="submit" value="Confirmar" style="width:100%")
+            .w3-card.w3-margin
+              .w3-container.w3-padding.w3-dark-grey
+                h5 Remover Membros
+              .w3-container.w3-blue
+                h5 Membros
+              .w3-container.w3-white
+                form(action="/removeMembro" method="POST" id="formRemoveMembro")
+                  input.w3-input.w3-border.w3-hover-border-black(type='email' name="idMembro" placeholder='Email...' required)
+                  input.w3-input.w3-cell.w3-border.gid(type="hidden" name="gid" value="" required)
+                  input.w3-button.w3-round-medium.w3-indigo(type="submit" value="Confirmar" style="width:100%")
+        .w3-col.l9(id="grupoInsertZone")
 
     div(id="perfilLayout")
       div(id="perfilInsertZone")
@@ -72,7 +108,7 @@ block content
 
       .w3-row(id="templateGrupos" style="display:none")
         .w3-col.l8.s12
-          .w3-card-4.w3-margin.w3-white
+          .w3-card-4.w3-margin.w3-white.grupo-container
             .w3-container
               h3
                 p(id="nomeGrupo")
@@ -82,6 +118,14 @@ block content
                 p(id="adminGrupo")
               h5
                 p(id="membrosGrupo")
+
+      .w3-row(id="templateGrupoPub" style="display:none")
+        .w3-card-4.w3-margin.w3-white
+          .w3-container
+            h3
+              p(id="conteudoPub")
+            h5
+              p(id="metadataPub")
 
       .w3-row(id="templatePerfil" style="display:none")
         .w3-col.l8.s12
@@ -101,6 +145,7 @@ block content
         })
         .done(function( data ) {
           $('#gruposLayout').hide();
+          $('#grupoLayout').hide();
           $('#publicacoesLayout').show();
           $('#perfilLayout').hide();
           $('#tabGrupos').removeClass('active');
@@ -130,6 +175,7 @@ block content
           .done(function( data ) {
             $('#publicacoesLayout').hide();
             $('#gruposLayout').show();
+            $('#grupoLayout').hide();
             $('#perfilLayout').hide();
             $('#tabFeed').removeClass('active');
             $('#tabGrupos').addClass('active');
@@ -137,6 +183,7 @@ block content
             data.forEach(function(item){
               var clone = $('#templateGrupos').clone(true);
               clone.attr("style", "");
+              clone.find(".grupo-container").attr('id', item._id);
               clone.find('#nomeGrupo').text(item.nome);
               clone.find('#descricaoGrupo').text(item.descricao);
               clone.find('#adminGrupo').text(item.admin);
@@ -155,6 +202,7 @@ block content
           .done(function( data ) {
             $('#publicacoesLayout').hide();
             $('#gruposLayout').hide();
+            $('#grupoLayout').hide();
             $('#perfilLayout').show();
             $('#tabFeed').removeClass('active');
             $('#tabGrupos').removeClass('active');

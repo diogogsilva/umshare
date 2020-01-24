@@ -21,6 +21,57 @@ router.get('/grupos', verificaAutenticacao, function (req, res) {
     .catch(erro => console.log(erro))
 });
 
+router.get('/grupo/:gid', verificaAutenticacao, function (req, res) {
+  var dados1, dados2, dados4, isAdmin;
+  var dados3 = [];
+  axios.get('http://localhost:5003/grupos/' + req.params.gid)
+    .then(dados => {
+      dados1 = dados.data;
+      // ADMIN
+      var token = jwt.sign({}, "umshare",
+      {
+        expiresIn: 3000,
+        issuer: "Servidor UMShare"
+      })
+      axios.get('http://localhost:5003/utilizadores/' + dados1.admin + '?token=' + token)
+        .then(dados => {
+          dados2 = dados.data;
+          if(dados.data.email == req.user.email) {
+            isAdmin = 1;
+          } else {
+            isAdmin = 0;
+          }
+          // MEMBROS
+          dados1.membros.forEach(function(membro, index) {
+            var token = jwt.sign({}, "umshare",
+            {
+              expiresIn: 3000,
+              issuer: "Servidor UMShare"
+            })
+            axios.get('http://localhost:5003/utilizadores/' + membro + '?token=' + token)
+            .then(dados => {
+              if(dados.data != null) {
+                dados3.push(dados.data)
+              }
+              if(index == dados1.membros.length -1) {
+                axios.get('http://localhost:5003/publicacoes?grupo=' + 123)//dados1._id) 
+                  .then(dados => {
+                    dados4 = dados.data;
+                    res.json({grupo: dados1, admin: dados2, isAdmin: isAdmin, membros: dados3, publicacoes: dados4})
+                  })
+                  .catch(erro => console.log(erro))
+              }
+            })
+            .catch(erro => console.log(erro))
+          });
+          // FIM MEMBROS
+        })
+        .catch(erro => console.log(erro))
+        //FIM ADMIN
+    })
+    .catch(erro => console.log(erro))
+});
+
 router.get('/perfil', verificaAutenticacao, function (req, res) {
   var token = jwt.sign({}, "umshare",
     {
@@ -53,19 +104,63 @@ router.post('/login', passport.authenticate('local', {
 })
 )
 
-router.post('/publicacao', function (req, res) {
-  console.log("BACKEND")
-  console.log(req);
-  /*axios.post('http://localhost:5003/publicacoes', {
-    /*metadata: req.body.metadata,
-    conteudo: req.body.conteudo,
-    utilizador: req.body.utilizador,
-    grupo: req.body.grupo,
-    ficheiro: req.files*/
-    /*data: req
+router.post('/addMembro', verificaAutenticacao, function (req, res) {
+  var token = jwt.sign({}, "umshare",
+  {
+    expiresIn: 3000,
+    issuer: "Servidor UMShare"
   })
-  .then(dados => console.log(dados))//res.jsonp({ "status": "ok", "msg": "Publicação criada com sucesso!" }))
-  .catch(e => console.log(e))//res.render('error', { error: e }))*/
+  axios.get('http://localhost:5003/utilizadores/' + req.body.idMembro + "?token=" + token)
+    .then(dados => {
+      if (dados.data == undefined) {
+        res.jsonp({ "status": "erro", "msg": "Utilizador '" + req.body.idMembro + "' não encontrado!" })
+      } else {
+        axios.get('http://localhost:5003/grupos/' + req.body.gid)
+        .then(dados => {
+          var existe;
+          dados.data.membros.forEach(element => {
+            if(element == req.body.idMembro) {
+              existe = true;
+            }
+          });
+          if(existe){
+            res.jsonp({ "status": "erro", "msg": "Utilizador '" + req.body.idMembro + "' já pertence ao grupo!" })
+          } else {
+            axios.post('http://localhost:5003/grupos/addMembro', {
+              gid: req.body.gid,
+              idMembro: req.body.idMembro
+            })
+            .then(dados => res.jsonp({ "status": "ok", "msg": "Adicionado com sucesso!" }))
+            .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+          }
+        })
+        .catch(e => res.render('error', { error: e }))
+      }
+    })
+    .catch(e => res.render('error', { error: e }))
+})
+
+router.post('/removeMembro', verificaAutenticacao, function (req, res) {
+  axios.get('http://localhost:5003/grupos/' + req.body.gid)
+    .then(dados => {
+      var existe;
+      dados.data.membros.forEach(element => {
+        if(element == req.body.idMembro) {
+          existe = true;
+        }
+      });
+      if(existe){
+        axios.post('http://localhost:5003/grupos/removeMembro', {
+              gid: req.body.gid,
+              idMembro: req.body.idMembro
+            })
+            .then(dados => res.jsonp({ "status": "ok", "msg": "Removido com sucesso!" }))
+            .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+      } else {
+        res.jsonp({ "status": "erro", "msg": "Grupo não contém o utilizador '" + req.body.idMembro + "'!" })
+      }
+    })
+    .catch(e => res.render('error', { error: e }))
 })
 
 router.post('/reg', function (req, res) {
