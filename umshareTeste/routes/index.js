@@ -53,6 +53,21 @@ router.post('/login', passport.authenticate('local', {
 })
 )
 
+router.post('/publicacao', function (req, res) {
+  console.log("BACKEND")
+  console.log(req);
+  /*axios.post('http://localhost:5003/publicacoes', {
+    /*metadata: req.body.metadata,
+    conteudo: req.body.conteudo,
+    utilizador: req.body.utilizador,
+    grupo: req.body.grupo,
+    ficheiro: req.files*/
+    /*data: req
+  })
+  .then(dados => console.log(dados))//res.jsonp({ "status": "ok", "msg": "Publicação criada com sucesso!" }))
+  .catch(e => console.log(e))//res.render('error', { error: e }))*/
+})
+
 router.post('/reg', function (req, res) {
   var token = jwt.sign({}, "umshare",
     {

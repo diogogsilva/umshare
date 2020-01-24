@@ -6,11 +6,12 @@ block content
   style.
     body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   .w3-content(style='max-width:1400px')
-    div.alert.success(id="divAlertSuccess" style="display:none")
+    div.alert.w3-red(id="divAlertWarning" style="opacity:0")
       span.closebtn &times;
-      strong Sucess!
-      | Ação positiva
-    // Header
+      strong(id="msgWarning")
+    div.alert.success(id="divAlertSuccess" style="opacity:0")
+      span.closebtn &times;
+      strong(id="msgSuccess")
     header.w3-container.w3-center.w3-padding-32
       h1
         b UM SHARE
@@ -31,8 +32,8 @@ block content
       form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoForm").w3-container.w3-center.w3-padding-16.w3-border.w3-border-indigo
         h4.w3-left Publicação
         input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
-        input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto")
-        input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="utilizador" value=user)
+        input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto" required)
+        input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="utilizador" value=user required)
         input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="grupo" value='')        
         .w3-cell-row(id="f1")
           input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")

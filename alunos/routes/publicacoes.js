@@ -46,7 +46,6 @@ router.get('/', function (req, res) {
 
 router.post('/', upload.array('ficheiro'), function (req, res) {
     //console.log(req.files)
-    console.log(req.body)
     var data = new Date()
     var metad = req.body.metadata.split(',')
 
@@ -87,7 +86,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
                         if (err) {
                             throw err;
                         }
-                        console.log("Diretoria " + dados._id + " criada");
+                        res.jsonp({ "status": "ok", "msg": "Inserido com sucesso!" })
                     }
                 );
                 for (var i = 0; i < req.files.length; i++) {
@@ -100,10 +99,10 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
                 }
             }
             else {
-                console.log("Qualquer coisa")
+                res.jsonp({ "status": "ok", "msg": "Inserido com sucesso!" })
             }
         })
-        .catch(e => res.status(500).jsonp(e))
+        .catch(e => res.jsonp({ "status": "erro", "msg": e }))
 })
 /*
     novoFicheiro.save(function (err, ficheiro) {

@@ -7,7 +7,7 @@ $(function () {
         //var ficheiro = $('<div></div>', { class: 'w3-cell-row', id: 'f' + cont })
         var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro" })
 
-        $('#f1').append(ficheiroInput)
+        $('#f1').append(ficheiroInput);
     })
 
     var close = document.getElementsByClassName("closebtn");
@@ -52,8 +52,6 @@ $(function () {
                 }
             }
         });
-
-
     });
 
     $("#formLogin").submit(function (e) {
@@ -81,34 +79,55 @@ $(function () {
 
     })
 
-    $("#publicacaoForm").submit(function (e) {
+    $('#publicacaoForm').on('submit', function (e) {
         e.preventDefault();
 
-        var form = $(this);
-        var url = form.attr('action');
-
-        console.log(form.serialize())
         $.ajax({
-            type: "POST",
-            url: url,
-            data: form.serialize(),
-            complete: function (xhr, textStatus) {
-                if (xhr.status != 200) {
-                    /*
+            url: this.action, 
+            type: this.method, 
+            data: new FormData(this),
+            processData: false,
+            contentType: false,
+            success: function (response) {
+                if (response.status == 'erro') {
                     $('.alert').css({ display: 'none' });
-                    $('#msgWarning').html("Campos por preencher!");
+                    $('#msgWarning').html(response.msg);
                     $('#divAlertWarning').css({ opacity: 1 });
                     document.getElementById('divAlertWarning').style.display = 'block';
-                    setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);*/
-                    console.log("Nem sei")
+                    setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
                 } else {
-                    window.location.href = '/';
+                    $('.alert').css({ display: 'none' });
+                    $('#msgSuccess').html(response.msg);
+                    $('#divAlertSuccess').css({ opacity: 1 });
+                    document.getElementById('divAlertSuccess').style.display = 'block';
+                    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+                    showTabFeed();
                 }
             }
         });
+    });
 
-    })
 
-    //setTimeout(function(){ document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
+    function showTabFeed() {
+        $('#publicacoesInsertZone').empty();
+        $.ajax({
+            url: "/feed"
+        })
+        .done(function( data ) {
+          $('#gruposLayout').hide();
+          $('#publicacoesLayout').show();
+          $('#perfilLayout').hide();
+          $('#tabGrupos').removeClass('active');
+          $('#tabFeed').addClass('active');
+          $('#tabPerfil').removeClass('active');
+          data.forEach(function(item){
+            var clone = $('#templatePublicacoes').clone(true);
+            clone.attr("style", "");
+            clone.find('#conteudoPub').text(item.conteudo);
+            clone.find('#metadataPub').text(item.metadata);
+            clone.appendTo("#publicacoesInsertZone");
+          })
+        });
+      }
 
 })
