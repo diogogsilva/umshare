@@ -1,10 +1,7 @@
 
 $(function () {
-    //var cont = 0
     $('#addfile').click(e => {
         e.preventDefault()
-        //cont++
-        //var ficheiro = $('<div></div>', { class: 'w3-cell-row', id: 'f' + cont })
         var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro" })
 
         $('#f1').append(ficheiroInput);
@@ -142,7 +139,7 @@ $(function () {
             });
     }
 
-    $('#comentarioForm').on('submit', function (e) {
+    $("#comentarioForm").submit(function (e) {
         e.preventDefault();
 
         var form = $(this);
@@ -152,22 +149,104 @@ $(function () {
             type: "POST",
             url: url,
             data: form.serialize(),
-            success: function (response) {
-                if (response.status == 'erro') {
+            complete: function (xhr, textStatus) {
+                if (xhr.status != 200) {
                     $('.alert').css({ display: 'none' });
-                    $('#msgWarning').html(response.msg);
+                    $('#msgWarning').html("Erro na inserção!");
                     $('#divAlertWarning').css({ opacity: 1 });
                     document.getElementById('divAlertWarning').style.display = 'block';
                     setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
                 } else {
                     $('.alert').css({ display: 'none' });
-                    $('#msgSuccess').html(response.msg);
+                    $('#msgSuccess').html("Comentário inserido!");
                     $('#divAlertSuccess').css({ opacity: 1 });
                     document.getElementById('divAlertSuccess').style.display = 'block';
-                    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 3000);
-                    window.location.href = "/";
+                    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 1000);
+                    setTimeout(function () {
+                        window.location.href = "/";
+                    }, 1000);
                 }
             }
         });
-    });
+
+    })
+
+    $("#apagaComentarioBtn").click(function (e) {
+
+
+        var data = "comid=" + $(this).closest("#templateComentarios").find("#idCom").text() + "&pubid=" + $(this).closest("#templateComentarios").find("#idPub").text();
+
+        console.log(data)
+
+        $.ajax({
+            type: "POST",
+            url: "/removerComentario",
+            data: data,
+            complete: function (xhr, textStatus) {
+                if (xhr.status != 200) {
+                    $('.alert').css({ display: 'none' });
+                    $('#msgWarning').html("Falha na remoção");
+                    $('#divAlertWarning').css({ opacity: 1 });
+                    document.getElementById('divAlertWarning').style.display = 'block';
+                    setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
+                } else {
+                    $('.alert').css({ display: 'none' });
+                    $('#msgSuccess').html("Comentario removido");
+                    $('#divAlertSuccess').css({ opacity: 1 });
+                    document.getElementById('divAlertSuccess').style.display = 'block';
+                    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 1000);
+                    setTimeout(function () {
+                        window.location.href = "/";
+                    }, 1000);
+                }
+            }
+        });
+    })
+
+
+    $('#hideComentarioForm').click(function () {
+        $('#divComentarioForm').slideUp("slow");
+        $('#showComentarioForm').removeClass('w3-hide');
+        $('#hideComentarioForm').addClass('w3-hide');
+    })
+
+    $('#showComentarioForm').click(function () {
+        $('#divComentarioForm').slideDown("slow");
+        $('#showComentarioForm').addClass('w3-hide');
+        $('#hideComentarioForm').removeClass('w3-hide');
+    })
+
+    $("#removePublicacaoBtn").click(function (e) {
+
+
+        var data = "pubid=" + $(this).closest("#pub").find("#idPub").text();
+
+        console.log(data)
+
+        $.ajax({
+            type: "POST",
+            url: "/removerPublicacao",
+            data: data,
+            complete: function (xhr, textStatus) {
+                if (xhr.status != 200) {
+                    $('.alert').css({ display: 'none' });
+                    $('#msgWarning').html("Falha na remoção");
+                    $('#divAlertWarning').css({ opacity: 1 });
+                    document.getElementById('divAlertWarning').style.display = 'block';
+                    setTimeout(function () { document.getElementById('divAlertWarning').style.opacity = 0; }, 3000);
+                } else {
+                    $('.alert').css({ display: 'none' });
+                    $('#msgSuccess').html("Publicacao Removida");
+                    $('#divAlertSuccess').css({ opacity: 1 });
+                    document.getElementById('divAlertSuccess').style.display = 'block';
+                    setTimeout(function () { document.getElementById('divAlertSuccess').style.opacity = 0; }, 1000);
+                    setTimeout(function () {
+                        window.location.href = "/";
+                    }, 1000);
+                }
+            }
+        });
+    })
+
+
 })

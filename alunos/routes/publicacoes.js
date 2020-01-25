@@ -146,7 +146,8 @@ router.post('/adicionarComentario', function (req, res) {
 
 // Remove comentário
 
-router.post('/removeComentario', function (req, res) {
+router.post('/removerComentario', function (req, res) {
+    console.log(req.body)
     if (req.body.comid != undefined && req.body.pubid != undefined) {
         Publicacoes.removerComentario(req.body.comid, req.body.pubid)
             .then(dados => res.jsonp(dados))

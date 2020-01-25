@@ -10,6 +10,12 @@ router.get('/', function (req, res) {
         .catch(erro => res.status(500).jsonp(erro))
 })
 
+router.get('/:gid', function (req, res) {
+    Grupos.listarPorId(req.params.gid)
+        .then(dados => res.jsonp(dados))
+        .catch(erro => res.status(500).jsonp(erro))
+})
+
 router.get('/:gid/membros', function (req, res) {
     Grupos.listarMembros(req.params.gid)
         .then(dados => res.jsonp(dados))

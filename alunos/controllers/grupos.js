@@ -5,6 +5,12 @@ module.exports.listar = () => {
         .exec()
 }
 
+module.exports.listarPorId = (gid) => {
+    return Grupo
+        .findById(gid)
+        .exec()
+}
+
 module.exports.listarMembros = (gid) => {
     return Grupo
         .find({ '_id': gid }, { _id: 0, membros: 1 })

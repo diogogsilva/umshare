@@ -46,6 +46,42 @@ block content
 
     div(id="gruposLayout")
       div(id="gruposInsertZone")
+    
+    div(id="grupoLayout" style="display:none")
+      button.w3-button.w3-round-medium.w3-indigo.w3-left.w3-margin-left.w3-margin-top(id='backToGruposList') Voltar
+      .w3-row
+        .w3-col.l3
+          .w3-card.w3-margin
+            .w3-container.w3-padding.w3-dark-grey
+              h4(id="nomeGrupo")
+            .w3-container.w3-white
+              h6(id="adminGrupo")
+              p(id="descricaoGrupo")
+            .w3-container.w3-blue
+              h5 Membros
+            div.w3-container.w3-white(id="listaMembrosGrupo")
+          div(id="adminTools" style="display:none")
+            .w3-card.w3-margin
+              .w3-container.w3-padding.w3-dark-grey
+                h5 Adicionar Membros
+              .w3-container.w3-blue
+                h5 Membros
+              .w3-container.w3-white
+                form(action="/addMembro" method="POST" id="formAddMembro")
+                  input.w3-input.w3-border.w3-hover-border-black(type='email' name="idMembro" placeholder='Email...' required)
+                  input.w3-input.w3-cell.w3-border.gid(type="hidden" name="gid" value="" required)
+                  input.w3-button.w3-round-medium.w3-indigo(type="submit" value="Confirmar" style="width:100%")
+            .w3-card.w3-margin
+              .w3-container.w3-padding.w3-dark-grey
+                h5 Remover Membros
+              .w3-container.w3-blue
+                h5 Membros
+              .w3-container.w3-white
+                form(action="/removeMembro" method="POST" id="formRemoveMembro")
+                  input.w3-input.w3-border.w3-hover-border-black(type='email' name="idMembro" placeholder='Email...' required)
+                  input.w3-input.w3-cell.w3-border.gid(type="hidden" name="gid" value="" required)
+                  input.w3-button.w3-round-medium.w3-indigo(type="submit" value="Confirmar" style="width:100%")
+        .w3-col.l9(id="grupoInsertZone")
 
     div(id="perfilLayout")
       div(id="perfilInsertZone")
@@ -63,35 +99,39 @@ block content
 
         
       .w3-card-4.w3-padding.w3-margin-bottom(id="pub" style="display:none")
+        button.w3-right.w3-margin-top(id="removePublicacaoBtn") X
         h5
           p(id="metadataPub")
         h3
           p(id="conteudoPub")
         h5
           p(id="dataPub")
-          //each file in pub.ficheiros
-            p= file.designacao
-            p= file.dataupload
-            
+        h5
+          p.w3-hide(id="idPub")
 
       .w3-container.w3-border.w3-border-black.w3-white.w3-margin.w3-margin-bottom(id="templateComentarios" style="display:none")
-        h.w3-right.w3-margin-top(ref="") X
+        button.w3-right.w3-margin-top(id="apagaComentarioBtn") X
         h5
           p(id="utilizadorCom")
         h4
           p(id="conteudoCom")
         h5
           p.w3-right(id="dataCom")
+        h5.w3-hide(id="idCom")
+        h5.w3-hide(id="idPub")
 
-    form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(style="display:none" action="/comentar" method="POST" id="comentarioForm")
-      input.w3-input.w3-cell.w3-border.w3-hide(type="text" name="pubid" id="pubidForm")
-      input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário")
-      input.w3-input.w3-margin-top.w3-margin-bottom.w3-pink(type="submit" value="Comentar")
+    div.w3-margin-bottom(id="divComentarioForm" style="display:none")
+      form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(action="/comentar" method="POST" id="comentarioForm")
+        input.w3-input.w3-cell.w3-border.w3-hide(type="text" name="pubid" id="pubidForm")
+        input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário" required)
+        input.w3-input.w3-margin-top.w3-margin-bottom.w3-indigo(type="submit" value="Comentar")
+      button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hideComentarioForm' style="width:100%") Esconder
+      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showComentarioForm' style="width:100%") Mostrar
 
 
       .w3-row(id="templateGrupos" style="display:none")
         .w3-col.l8.s12
-          .w3-card-4.w3-margin.w3-white
+          .w3-card-4.w3-margin.w3-white.grupo-container
             .w3-container
               h3
                 p(id="nomeGrupo")
@@ -102,6 +142,14 @@ block content
               h5
                 p(id="membrosGrupo")
 
+      .w3-row(id="templateGrupoPub" style="display:none")
+        .w3-card-4.w3-margin.w3-white
+          .w3-container
+            h3
+              p(id="conteudoPub")
+            h5
+              p(id="metadataPub")
+
       .w3-row(id="templatePerfil" style="display:none")
         .w3-col.l8.s12
           .w3-card-4.w3-margin.w3-white
@@ -110,6 +158,8 @@ block content
                 p(id="nomePerfil")
               h5
                 p(id="emailPerfil")
+      
+      h4.w3-margin(id="titComentarios" style="display:none") Comentários
 
   script.
     $(document).ready(function () {
@@ -120,13 +170,14 @@ block content
         })
         .done(function( data ) {
           $('#gruposLayout').hide();
+          $('#grupoLayout').hide();
           $('#publicacoesLayout').show();
           $('#perfilLayout').hide();
           $('#tabGrupos').removeClass('active');
           $('#tabFeed').addClass('active');
           $('#tabPerfil').removeClass('active');
           data.forEach(function(item){
-            $("#comentarioForm").attr("style", "")
+            $("#divComentarioForm").attr("style", "")
             var Clone = $('#templatePublicacoes #idk #t').clone(true);
             var pubClone = $('#pub').clone(true);
             console.log(item)
@@ -146,18 +197,22 @@ block content
             pubClone.appendTo(Clone)
 
             if(item.comentarios.length > 0) {
-              item.comentarios.forEach(function(item){
+              $("#titComentarios").attr("style", "")
+              $("#titComentarios").appendTo(Clone)
+              item.comentarios.forEach(function(itemc){
                 var comClone = $('#templateComentarios').clone(true);
                 console.log("Entrei")
                 comClone.attr("style", "");
-                comClone.find('#conteudoCom').text(item.conteudo);
-                comClone.find('#utilizadorCom').text("Comentado por: " + item.utilizador);
-                comClone.find('#dataCom').text(item.data);
+                comClone.find('#conteudoCom').text(itemc.conteudo);
+                comClone.find('#utilizadorCom').text("Comentado por: " + itemc.utilizador + " Buscar o nome?");
+                comClone.find('#dataCom').text(itemc.data);
+                comClone.find('#idCom').text(itemc._id);
+                comClone.find('#idPub').text(item._id);
                 comClone.appendTo(Clone);
               })
             }
-            $("#comentarioForm #pubidForm").val(item._id);
-            $("#comentarioForm").appendTo(Clone)
+            $("#divComentarioForm #comentarioForm #pubidForm").val(item._id);
+            $("#divComentarioForm").appendTo(Clone)
             Clone.appendTo("#publicacoesInsertZone");
           })
         });
@@ -177,6 +232,7 @@ block content
           .done(function( data ) {
             $('#publicacoesLayout').hide();
             $('#gruposLayout').show();
+            $('#grupoLayout').hide();
             $('#perfilLayout').hide();
             $('#tabFeed').removeClass('active');
             $('#tabGrupos').addClass('active');
@@ -184,6 +240,7 @@ block content
             data.forEach(function(item){
               var clone = $('#templateGrupos').clone(true);
               clone.attr("style", "");
+              clone.find(".grupo-container").attr('id', item._id);
               clone.find('#nomeGrupo').text(item.nome);
               clone.find('#descricaoGrupo').text(item.descricao);
               clone.find('#adminGrupo').text(item.admin);
@@ -202,6 +259,7 @@ block content
           .done(function( data ) {
             $('#publicacoesLayout').hide();
             $('#gruposLayout').hide();
+            $('#grupoLayout').hide();
             $('#perfilLayout').show();
             $('#tabFeed').removeClass('active');
             $('#tabGrupos').removeClass('active');
