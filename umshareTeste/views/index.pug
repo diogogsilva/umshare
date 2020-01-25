@@ -1,8 +1,6 @@
 extends layout
 
 block content
-  button.w3-btn.w3-round-large(onclick="window.location.href = '/register'") Registar utilizador
-  button.w3-btn.w3-round-large(onclick="window.location.href = '/logout'") Logout
   style.
     body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
   .w3-content(style='max-width:1400px')
@@ -22,8 +20,9 @@ block content
       .topnav
         a.active(id="tabFeed") Feed
         a(id="tabGrupos") Grupos
-        a(id="tabPerfil") Perfil
-        .search-container
+        a.w3-right(href="/logout") Terminar Sessão
+        a.w3-right(id="tabPerfil") Perfil
+        //.search-container
           form(action='/action_page.php')
             input(type='text' placeholder='Search..' name='search')
             button(type='submit')
@@ -45,7 +44,21 @@ block content
       div(id="publicacoesInsertZone")
 
     div(id="gruposLayout")
-      div(id="gruposInsertZone")
+      div(id="divGrupoForm")
+        form(action="/grupos" method="POST" enctype='multipart/form-data' id="grupoForm").w3-container.w3-center.w3-padding-16.w3-border
+          h4.w3-left Novo Grupo
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="nome" placeholder="Nome do grupo" required)
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="descricao" placeholder="Breve descrição" required)
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" id="admin" name="admin" value=user required)
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="membros" value=user required)        
+          input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Criar")
+      button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hideGrupoForm' style="width:100%") Esconder
+      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showGrupoForm' style="width:100%") Mostrar
+      div
+        h5.w3-margin-left(id="headerGruposInsertZone" style="display: none;") Os teus grupos
+        .w3-row(id="gruposInsertZone")
+        h5.w3-margin-left(id="headerGruposInsertZone2" style="display: none;") Outros grupos
+        .w3-row(id="gruposInsertZone2")
     
     div(id="grupoLayout" style="display:none")
       button.w3-button.w3-round-medium.w3-indigo.w3-left.w3-margin-left.w3-margin-top(id='backToGruposList') Voltar
@@ -129,18 +142,16 @@ block content
       button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showComentarioForm' style="width:100%") Mostrar
 
 
-      .w3-row(id="templateGrupos" style="display:none")
-        .w3-col.l8.s12
-          .w3-card-4.w3-margin.w3-white.grupo-container
-            .w3-container
-              h3
-                p(id="nomeGrupo")
-              h5
-                p(id="descricaoGrupo")
-              h5
-                p(id="adminGrupo")
-              h5
-                p(id="membrosGrupo")
+      .w3-col.l6(id="templateGrupos" style="display:none")
+        .w3-card-4.w3-margin.w3-white.w3-grupo
+          .w3-container
+            h3
+              p(id="nomeGrupo")
+            h6
+              p(id="descricaoGrupo")
+            h6
+              p.w3-left(id="adminGrupo" style="display:inline")
+              p.w3-right(id="membrosGrupo" style="display:inline")
 
       .w3-row(id="templateGrupoPub" style="display:none")
         .w3-card-4.w3-margin.w3-white
@@ -217,37 +228,11 @@ block content
           })
         });
       }
+      const self = this;
       showTabFeed();
       $("#tabFeed").on("click", function () {
         if(!$('#tabFeed').hasClass('active')){
           showTabFeed();
-        }
-      });
-      $("#tabGrupos").on("click", function () {
-        if(!$('#tabGrupos').hasClass('active')){
-          $('#gruposInsertZone').empty();
-          $.ajax({
-              url: "/grupos"
-          })
-          .done(function( data ) {
-            $('#publicacoesLayout').hide();
-            $('#gruposLayout').show();
-            $('#grupoLayout').hide();
-            $('#perfilLayout').hide();
-            $('#tabFeed').removeClass('active');
-            $('#tabGrupos').addClass('active');
-            $('#tabPerfil').removeClass('active');
-            data.forEach(function(item){
-              var clone = $('#templateGrupos').clone(true);
-              clone.attr("style", "");
-              clone.find(".grupo-container").attr('id', item._id);
-              clone.find('#nomeGrupo').text(item.nome);
-              clone.find('#descricaoGrupo').text(item.descricao);
-              clone.find('#adminGrupo').text(item.admin);
-              clone.find('#membrosGrupo').text(item.membros.length);
-              clone.appendTo("#gruposInsertZone");
-            })
-          });
         }
       });
       $("#tabPerfil").on("click", function () {

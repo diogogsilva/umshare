@@ -101,8 +101,21 @@ router.post('/login', passport.authenticate('local', {
   successFlash: 'Utilizador autenticado com sucesso!',
   failureRedirect: '/erro',
   failureFlash: 'Utilizador ou password inválido(s)...'
+}))
+
+router.post('/grupos', verificaAutenticacao, function (req, res) {
+  console.log(req.body);
+  if(req.body.nome != undefined && req.body.descricao != undefined && req.body.admin != undefined && req.body.membros != undefined) {
+    axios.post('http://localhost:5003/grupos/', {
+      nome: req.body.nome,
+      descricao: req.body.descricao,
+      admin: req.body.admin,
+      membros: req.body.membros
+    })
+    .then(dados => res.jsonp({ "status": "ok", "msg": "Grupo criado com sucesso!" }))
+    .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+  }
 })
-)
 
 router.post('/addMembro', verificaAutenticacao, function (req, res) {
   var token = jwt.sign({}, "umshare",
