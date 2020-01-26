@@ -33,14 +33,14 @@ block content
           h4.w3-left Publicação
           input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
           input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto" required)
-          input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="utilizador" value=user required)
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="grupo" value='')        
           .w3-cell-row(id="f1")
             input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")
           button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfile') Adicionar outro ficheiro
           input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
       button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hidePublicacaoForm' style="width:100%") Esconder
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoForm' style="width:100%") Mostrar
+      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoForm' style="width:100%") Nova publicação
       div(id="publicacoesInsertZone")
 
     div(id="gruposLayout")
@@ -110,20 +110,21 @@ block content
         .w3-col.l8.s12(id="idk")
           .w3-card-4.w3-margin.w3-white(id="t")
 
-        
-      .w3-card-4.w3-padding.w3-margin-bottom(id="pub" style="display:none")
-        button.w3-right.w3-margin-top(id="removePublicacaoBtn") X
-        h5
-          p(id="metadataPub")
-        h3
-          p(id="conteudoPub")
-        h5
-          p(id="dataPub")
-        h5
-          p.w3-hide(id="idPub")
+      div(id="pub" style="display:none") 
+        .w3-card-4.w3-padding.w3-margin-bottom(id="" )
+          button.w3-right.w3-margin-top.delete-button(id="removePublicacaoBtn") X
+          h5
+            p(id="metadataPub")
+          h3
+            p(id="conteudoPub")
+          h5
+            p(id="dataPub")
+          h5
+            p.w3-hide(id="idPub")
+        div(id="comentZone" style="display:none")
 
       .w3-container.w3-border.w3-border-black.w3-white.w3-margin.w3-margin-bottom(id="templateComentarios" style="display:none")
-        button.w3-right.w3-margin-top(id="apagaComentarioBtn") X
+        button.w3-right.w3-margin-top.delete-button(id="apagaComentarioBtn") X
         h5
           p(id="utilizadorCom")
         h4
@@ -133,13 +134,15 @@ block content
         h5.w3-hide(id="idCom")
         h5.w3-hide(id="idPub")
 
-    div.w3-margin-bottom(id="divComentarioForm" style="display:none")
-      form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(action="/comentar" method="POST" id="comentarioForm")
-        input.w3-input.w3-cell.w3-border.w3-hide(type="text" name="pubid" id="pubidForm")
-        input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário" required)
-        input.w3-input.w3-margin-top.w3-margin-bottom.w3-indigo(type="submit" value="Comentar")
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hideComentarioForm' style="width:100%") Esconder
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showComentarioForm' style="width:100%") Mostrar
+      div.w3-margin-bottom(id="divComentarioForm" style="display:none")
+        form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(action="/comentar" method="POST" id="comentarioForm")
+          input.w3-input.w3-cell.w3-border(type="hidden" name="pubid" id="pubidForm")
+          input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário" required)
+          input.w3-button.w3-round-large.w3-indigo.w3-margin-top.w3-input.w3-indigo(type="submit" value="Comentar")
+      
+      div(id="divHideButton" style="display:none")
+        button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='hideComentarioForm' style="width:100%") Esconder
+        button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='showComentarioForm' style="width:100%") Comentários
 
 
       .w3-col.l6(id="templateGrupos" style="display:none")
@@ -174,67 +177,6 @@ block content
 
   script.
     $(document).ready(function () {
-      function showTabFeed() {
-        $('#publicacoesInsertZone').empty();
-        $.ajax({
-            url: "/feed"
-        })
-        .done(function( data ) {
-          $('#gruposLayout').hide();
-          $('#grupoLayout').hide();
-          $('#publicacoesLayout').show();
-          $('#perfilLayout').hide();
-          $('#tabGrupos').removeClass('active');
-          $('#tabFeed').addClass('active');
-          $('#tabPerfil').removeClass('active');
-          data.forEach(function(item){
-            $("#divComentarioForm").attr("style", "")
-            var Clone = $('#templatePublicacoes #idk #t').clone(true);
-            var pubClone = $('#pub').clone(true);
-            console.log(item)
-            Clone.attr("style", "");
-            pubClone.attr("style", "");
-            if(item.conteudo == '') {
-              pubClone.find('#conteudoPub').text("Publicação sem mensagem");
-            } else 
-              pubClone.find('#conteudoPub').text(item.conteudo);
-            if (item.metadata == '') {
-              pubClone.find('#metadataPub').text("Publicação sem tags");
-            } else
-              pubClone.find('#metadataPub').text("Tags: "+ item.metadata);
-            pubClone.find('#dataPub').text(item.data);
-            pubClone.find('#idPub').text(item._id);
-
-            pubClone.appendTo(Clone)
-
-            if(item.comentarios.length > 0) {
-              $("#titComentarios").attr("style", "")
-              $("#titComentarios").appendTo(Clone)
-              item.comentarios.forEach(function(itemc){
-                var comClone = $('#templateComentarios').clone(true);
-                console.log("Entrei")
-                comClone.attr("style", "");
-                comClone.find('#conteudoCom').text(itemc.conteudo);
-                comClone.find('#utilizadorCom').text("Comentado por: " + itemc.utilizador + " Buscar o nome?");
-                comClone.find('#dataCom').text(itemc.data);
-                comClone.find('#idCom').text(itemc._id);
-                comClone.find('#idPub').text(item._id);
-                comClone.appendTo(Clone);
-              })
-            }
-            $("#divComentarioForm #comentarioForm #pubidForm").val(item._id);
-            $("#divComentarioForm").appendTo(Clone)
-            Clone.appendTo("#publicacoesInsertZone");
-          })
-        });
-      }
-      const self = this;
-      showTabFeed();
-      $("#tabFeed").on("click", function () {
-        if(!$('#tabFeed').hasClass('active')){
-          showTabFeed();
-        }
-      });
       $("#tabPerfil").on("click", function () {
         if(!$('#tabPerfil').hasClass('active')){
           $('#perfilInsertZone').empty();

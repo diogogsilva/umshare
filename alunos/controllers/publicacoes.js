@@ -23,6 +23,12 @@ module.exports.filtrar_grupo = grupo => {
         .exec()
 }
 
+module.exports.filtrar_sem_grupo = () => {
+    return Publicacao
+        .find({ grupo: "" })
+        .exec()
+}
+
 // Listar por utilizador
 
 module.exports.filtrar_utilizador = utilizador => {
