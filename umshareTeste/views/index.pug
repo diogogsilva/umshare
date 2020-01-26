@@ -22,11 +22,7 @@ block content
         a(id="tabGrupos") Grupos
         a.w3-right(href="/logout") Terminar Sessão
         a.w3-right(id="tabPerfil") Perfil
-        //.search-container
-          form(action='/action_page.php')
-            input(type='text' placeholder='Search..' name='search')
-            button(type='submit')
-              i.fa.fa-search
+
     div(id="publicacoesLayout")
       div(id="divPublicacaoForm")
         form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoForm").w3-container.w3-center.w3-padding-16.w3-border
@@ -94,7 +90,23 @@ block content
                   input.w3-input.w3-border.w3-hover-border-black(type='email' name="idMembro" placeholder='Email...' required)
                   input.w3-input.w3-cell.w3-border.gid(type="hidden" name="gid" value="" required)
                   input.w3-button.w3-round-medium.w3-indigo(type="submit" value="Confirmar" style="width:100%")
-        .w3-col.l9(id="grupoInsertZone")
+        .w3-col.l9
+          div.w3-card-4.w3-margin.w3-white
+            div(id="divPublicacaoGrupoForm")
+              form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoGrupoForm").w3-container.w3-center.w3-padding-16.w3-border
+                h4.w3-left Nova Publicação
+                input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
+                input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto" required)
+                input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
+                input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide.gid(type="text" name="grupo")        
+                .w3-cell-row(id="f1")
+                  input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")
+                button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfile') Adicionar outro ficheiro
+                input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
+            button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hidePublicacaoGrupoForm' style="width:100%") Esconder
+            button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoGrupoForm' style="width:100%") Nova publicação
+          div(id="grupoInsertZone")
+          
 
     div(id="perfilLayout")
       div(id="perfilInsertZone")
@@ -111,7 +123,7 @@ block content
           .w3-card-4.w3-margin.w3-white(id="t")
 
       div(id="pub" style="display:none") 
-        .w3-card-4.w3-padding.w3-margin-bottom(id="" )
+        .w3-card-4.w3-padding.w3-margin-bottom
           button.w3-right.w3-margin-top.delete-button(id="removePublicacaoBtn") X
           h5
             p(id="metadataPub")
@@ -163,6 +175,51 @@ block content
               p(id="conteudoPub")
             h5
               p(id="metadataPub")
+
+
+      .w3-row(id="templateGrupoPublicacoes" style="display:none")
+        .w3-col.l8.s12(id="idk")
+          .w3-card-4.w3-margin.w3-white(id="t")
+
+      div(id="pubGrupo" style="display:none") 
+        .w3-card-4.w3-padding.w3-margin-bottom
+          button.w3-right.w3-margin-top.delete-button(id="removePublicacaoGrupoBtn") X
+          h5
+            p(id="metadataPub")
+          h3
+            p(id="conteudoPub")
+          h5
+            p(id="dataPub")
+          h5
+            p.w3-hide(id="idPub")
+        div(id="comentZone" style="display:none")
+
+      .w3-container.w3-border.w3-border-black.w3-white.w3-margin.w3-margin-bottom(id="templateComentariosGrupo" style="display:none")
+        button.w3-right.w3-margin-top.delete-button(id="apagaComentarioGrupoBtn") X
+        h5
+          p(id="utilizadorCom")
+        h4
+          p(id="conteudoCom")
+        h5
+          p.w3-right(id="dataCom")
+        h5.w3-hide(id="idCom")
+        h5.w3-hide(id="idPub")
+
+      div.w3-margin-bottom(id="divComentarioGrupoForm" style="display:none")
+        form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(action="/comentar" method="POST" id="comentarioGrupoForm")
+          input.w3-input.w3-cell.w3-border(type="hidden" name="pubid" id="pubidForm")
+          input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário" required)
+          input.w3-button.w3-round-large.w3-indigo.w3-margin-top.w3-input.w3-indigo(type="submit" value="Comentar")
+      
+      div(id="divHideButtonGrupo" style="display:none")
+        button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='hideComentarioGrupoForm' style="width:100%") Esconder
+        button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='showComentarioGrupoForm' style="width:100%") Comentários
+
+
+
+
+
+
 
       .w3-row(id="templatePerfil" style="display:none")
         .w3-col.l8.s12

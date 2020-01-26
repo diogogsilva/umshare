@@ -54,7 +54,7 @@ router.get('/grupo/:gid', verificaAutenticacao, function (req, res) {
                   dados3.push(dados.data)
                 }
                 if (index == dados1.membros.length - 1) {
-                  axios.get('http://localhost:5003/publicacoes?grupo=' + 123)//dados1._id) 
+                  axios.get('http://localhost:5003/publicacoes?grupo=' + req.params.gid) 
                     .then(dados => {
                       dados4 = dados.data;
                       res.json({ grupo: dados1, admin: dados2, isAdmin: isAdmin, membros: dados3, publicacoes: dados4 })
