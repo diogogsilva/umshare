@@ -154,7 +154,9 @@ $(function () {
                 }
                 var userInSession = $('#utilizador').val();
                 if(item.utilizador != userInSession) {
-                    pubClone.find('#removePublicacaoBtn').remove();
+                    pubClone.find('#removePublicacaoBtn').hide();
+                } else {
+                    pubClone.find('#removePublicacaoBtn').show();
                 }
                 pubClone.find('#dataPub').text(item.data);
                 pubClone.find('#idPub').text(item._id);
