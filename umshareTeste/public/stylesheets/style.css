@@ -6,6 +6,10 @@
   cursor: pointer;
 }
 
+.delete-button {
+  cursor: pointer;
+}
+
 /* notification status */
 .alert {
   padding: 20px;

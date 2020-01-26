@@ -10,7 +10,7 @@ router.get('/', verificaAutenticacao, function (req, res) {
 });
 
 router.get('/feed', verificaAutenticacao, function (req, res) {
-  axios.get('http://localhost:5003/publicacoes?utilizador=' + req.user.email)
+  axios.get('http://localhost:5003/publicacoes?grupo=semgrupo')
     .then(dados => res.json(dados.data))
     .catch(erro => console.log(erro))
 });

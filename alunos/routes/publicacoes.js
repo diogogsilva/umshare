@@ -27,15 +27,20 @@ router.get('/', function (req, res) {
             .then(dados => res.jsonp(dados))
             .catch(erro => res.status(500).jsonp(erro))
     } else if (req.query.grupo) {
-        Publicacoes.filtrar_grupo(req.query.grupo)
-            .then(dados => res.jsonp(dados))
-            .catch(erro => res.status(500).jsonp(erro))
+        if(req.query.grupo == 'semgrupo') {
+            Publicacoes.filtrar_sem_grupo(req.query.grupo)
+                .then(dados => res.jsonp(dados))
+                .catch(erro => res.status(500).jsonp(erro))
+        } else {
+            Publicacoes.filtrar_grupo(req.query.grupo)
+                .then(dados => res.jsonp(dados))
+                .catch(erro => res.status(500).jsonp(erro))
+        }
     } else if (req.query.metadata) {
         Publicacoes.filtrar_metadata(req.query.metadata)
             .then(dados => res.jsonp(dados))
             .catch(erro => res.status(500).jsonp(erro))
-    }
-    else {
+    } else {
         Publicacoes.listar()
             .then(dados => res.jsonp(dados))
             .catch(erro => res.status(500).jsonp(erro))
