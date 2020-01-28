@@ -32,17 +32,19 @@ $(function () {
             var pertenceAoGrupo = false;
             var userInSession = $('#admin').val();
             item.membros.forEach(function(item){
-            if(item == userInSession) {
-                pertenceAoGrupo = true;
-            }
+                if(item == userInSession) {
+                    pertenceAoGrupo = true;
+                }
             })
+            console.log('GRUPO: ' + item.descricao)
             if(pertenceAoGrupo) {
-            clone.find('#'+ item._id).addClass('grupo-container');
-            clone.appendTo("#gruposInsertZone");
-            $('#headerGruposInsertZone').show();
+                clone.find('#'+ item._id).addClass('grupo-container');
+                clone.appendTo("#gruposInsertZone");
+                $('#headerGruposInsertZone').show();
             } else {
-            clone.appendTo("#gruposInsertZone2");
-            $('#headerGruposInsertZone2').show();
+                clone.find('#'+ item._id).removeClass('grupo-container');
+                clone.appendTo("#gruposInsertZone2");
+                $('#headerGruposInsertZone2').show();
             }
         })
         eventContainer();
@@ -68,52 +70,71 @@ $(function () {
                 var membroP = $('<p>' + membro.nome + ' (' + membro.email + ')</p>');
                 $('#listaMembrosGrupo').append(membroP);
             })
-            data.publicacoes.forEach(pubicacao => {
+            data.publicacoes.forEach(publicacao => {
                 var Clone = $('#templateGrupoPublicacoes #idk #t').clone(true);
                 var pubClone = $('#pubGrupo').clone(true);
                 Clone.attr("style", "");
                 pubClone.attr("style", "");
-                if(pubicacao.conteudo == '') {
+                pubClone.find("#publicadorPub").text("Publicado por: " + publicacao.utilizador)
+                if(publicacao.conteudo == '') {
                     pubClone.find('#conteudoPub').text("Publicação sem mensagem");
                 } else {
-                    pubClone.find('#conteudoPub').text(pubicacao.conteudo);
+                    pubClone.find('#conteudoPub').text(publicacao.conteudo);
                 }
-                if (pubicacao.metadata == '') {
+                if (publicacao.metadata == '') {
                     pubClone.find('#metadataPub').text("Publicação sem tags");
                 } else {
-                    pubClone.find('#metadataPub').text("Tags: "+ pubicacao.metadata);
+                    pubClone.find('#metadataPub').text("Tags: "+ publicacao.metadata);
                 }
+                pubClone.find('#dataPub').text(publicacao.data);
+                pubClone.find('#idPub').text(publicacao._id);
                 var userInSession = $('#utilizador').val();
-                if(pubicacao.utilizador != userInSession) {
+                if(publicacao.utilizador != userInSession) {
                     pubClone.find('#removePublicacaoGrupoBtn').hide();
                 } else {
                     pubClone.find('#removePublicacaoGrupoBtn').show();
                 }
-                pubClone.find('#dataPub').text(pubicacao.data);
-                pubClone.find('#idPub').text(pubicacao._id);
+
+                if (publicacao.ficheiros.length > 0) {
+                    fileZone = pubClone.find('#fileZone')
+                    fileZone.empty();
+                    fileZone.attr("style", "")
+                    fileZone.append('<h4 style="font-weight:bold">Ficheiros partilhados</h4>')
+
+                    publicacao.ficheiros.forEach(function (itemf) {
+                        var pubFileClone = $('#fileNamePub').clone(true)
+                        pubFileClone.attr("style", "")
+                        pubFileClone.click({ pubid: publicacao._id, fileName: itemf.designacao, size: itemf.size, mimetype: itemf.mimetype }, showFileInfo);
+                        pubFileClone.find("#fileNamePubp").text(itemf.designacao)
+                        pubFileClone.appendTo(fileZone)
+                    })
+                } else {
+                    fileZone = pubClone.find('#fileZone')
+                    fileZone.empty();
+                    fileZone.attr("style", "display:none")
+                }
 
                 pubClone.appendTo(Clone)
 
                 var comentzone = Clone.find('#comentZone')
                 comentzone.empty();
 
-                if(pubicacao.comentarios.length > 0) {
-                    $("#titComentarios").attr("style", "")
-                    $("#titComentarios").appendTo(comentzone)
-                    pubicacao.comentarios.forEach(function(itemc){
+                if(publicacao.comentarios.length > 0) {
+                    comentzone.append('<h4 style="font-weight:bold">Comentários</h4>')
+                    publicacao.comentarios.forEach(function(itemc){
                         var comClone = $('#templateComentariosGrupo').clone(true);
                         comClone.attr("style", "");
                         comClone.find('#conteudoCom').text(itemc.conteudo);
                         comClone.find('#utilizadorCom').text("Comentado por: " + itemc.utilizador + " Buscar o nome?");
                         comClone.find('#dataCom').text(itemc.data);
                         comClone.find('#idCom').text(itemc._id);
-                        comClone.find('#idPub').text(pubicacao._id);
+                        comClone.find('#idPub').text(publicacao._id);
                         comClone.appendTo(comentzone);
                     });
                 }
                 var formComentClone = $('#divComentarioGrupoForm').clone(true);
                 formComentClone.attr("style", "");
-                formComentClone.find('#pubidForm').val(pubicacao._id);
+                formComentClone.find('#pubidForm').val(publicacao._id);
                 formComentClone.appendTo(comentzone);
                 var hideButtons = $('#divHideButtonGrupo').clone(true);
                 hideButtons.attr("style", "");
@@ -353,8 +374,6 @@ $(function () {
     })
 
     $("#removePublicacaoGrupoBtn").click(function (e) {
-
-
         var data = "pubid=" + $(this).closest("#pubGrupo").find("#idPub").text();
 
         $.ajax({
@@ -379,4 +398,31 @@ $(function () {
             }
         });
     })
+
+    function showFileInfo(event) {
+        console.log(event.data.mimetype)
+        var url = "http://localhost:5003/publicacoes/getFicheiro"
+
+        var fileName = $('<h5>' + event.data.fileName + '</h5>')
+        var fileSize = $('<h5> Tamanho: ' + event.data.size + ' Bytes' + '</h5>')
+
+        var data = "pubid=" + event.data.pubid + "&fileName=" + event.data.fileName
+        console.log(data)
+
+
+
+        //if (event.data.mimetype == 'image/png' || event.data.mimetype == 'image/jpeg') {
+        //  var ficheiro = $('<img src="' + response.path + '"width="40%"/>')
+        //} else {
+        //var ficheiro = $('<p>' + JSON.stringify(event.data) + '</p>')
+        //}
+        var download = $('<div><a href="http://localhost:5003/publicacoes/getFicheiro?pubid=' + event.data.pubid + '&fileName=' + event.data.fileName + '">Download</a></div>')
+
+        console.log(download)
+        //var ficheiro = $('<p>' + JSON.stringify(f) + '</p>')
+        //var download = $('<div><a href="/download/' + f.name + '">Download</a></div>')
+        $("#display").empty()
+        $('#display').append(fileName, fileSize, download)
+        $('#display').modal()
+    }
 });
