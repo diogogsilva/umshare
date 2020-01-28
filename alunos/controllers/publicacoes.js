@@ -40,17 +40,17 @@ module.exports.filtrar_utilizador = utilizador => {
 
 // Listar por metadata?
 
-module.exports.filtrar_metadata_user = (md, user) => {
+module.exports.filtrar_pubs_metadata = (md) => {
     return Publicacao
         .aggregate(
-            [{ $unwind: "$metadata" }, { $match: { 'metadata': md, 'utilizador': user, grupo: '' } }]
+            [{ $unwind: "$metadata" }, { $match: { 'metadata': md, grupo: '' } }]
         )
 }
 
-module.exports.listar_tags = (user, grupo) => {
+module.exports.listar_tags = (grupo) => {
     return Publicacao
         .aggregate(
-            [{ $unwind: "$metadata" }, { $match: { "utilizador": user, "grupo": grupo } }, { $group: { _id: "$metadata", count: { $sum: 1 } } }, { $sort: { count: -1, _id: 1 } }]
+            [{ $unwind: "$metadata" }, { $match: { "grupo": grupo } }, { $group: { _id: "$metadata", count: { $sum: 1 } } }, { $sort: { count: -1, _id: 1 } }]
         )
 }
 

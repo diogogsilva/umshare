@@ -155,6 +155,7 @@ $(function () {
                     var pubClone = $('#pub').clone(true);
                     Clone.attr("style", "");
                     pubClone.attr("style", "");
+                    pubClone.find("#publicadorPub").text("Publicado por: " + item.utilizador)
                     if (item.conteudo == '') {
                         pubClone.find('#conteudoPub').text("Publicação sem mensagem");
                     } else {
@@ -169,7 +170,9 @@ $(function () {
                     pubClone.find('#idPub').text(item._id);
                     var userInSession = $('#utilizador').val();
                     if (item.utilizador != userInSession) {
-                        pubClone.find('#removePublicacaoBtn').remove();
+                        pubClone.find('#removePublicacaoBtn').hide();
+                    } else {
+                        pubClone.find('#removePublicacaoBtn').show()
                     }
 
                     if (item.ficheiros.length > 0) {

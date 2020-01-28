@@ -22,6 +22,14 @@ router.get('/getFicheiro', function (req, res) {
 
 })
 
+// Tags das  pubs
+
+router.get('/tags', function (req, res) {
+    Publicacoes.listar_tags("")
+        .then(dados => res.jsonp(dados))
+        .catch(erro => res.status(500).jsonp(erro))
+})
+
 // Obter publicação por id
 
 router.get('/:id', function (req, res) {
@@ -33,20 +41,20 @@ router.get('/:id', function (req, res) {
 // GET PUBLICAÇÕES
 
 router.get('/', function (req, res) {
-    if (req.query.utilizador) {
+    if (req.query.metadata) {
         if (req.query.metadata == "semmd") {
-            Publicacoes.filtrar_metadata_user("", req.query.utilizador)
-                .then(dados => res.jsonp(dados))
-                .catch(erro => res.status(500).jsonp(erro))
-        } else if (req.query.metadata) {
-            Publicacoes.filtrar_metadata_user(req.query.metadata, req.query.utilizador)
+            Publicacoes.filtrar_pubs_metadata("")
                 .then(dados => res.jsonp(dados))
                 .catch(erro => res.status(500).jsonp(erro))
         } else {
-            Publicacoes.filtrar_utilizador(req.query.utilizador)
+            Publicacoes.filtrar_pubs_metadata(req.query.metadata)
                 .then(dados => res.jsonp(dados))
                 .catch(erro => res.status(500).jsonp(erro))
         }
+    } else if (req.query.utilizador) {
+        Publicacoes.filtrar_utilizador(req.query.utilizador)
+            .then(dados => res.jsonp(dados))
+            .catch(erro => res.status(500).jsonp(erro))
     } else if (req.query.grupo) {
         if (req.query.grupo == 'semgrupo') {
             Publicacoes.filtrar_sem_grupo(req.query.grupo)
@@ -64,13 +72,6 @@ router.get('/', function (req, res) {
     }
 })
 
-// Tags das  pubs
-
-router.get('/tags/:usermail', function (req, res) {
-    Publicacoes.listar_tags(req.params.usermail, "")
-        .then(dados => res.jsonp(dados))
-        .catch(erro => res.status(500).jsonp(erro))
-})
 
 // INSERÇÃO DE PUBLICAÇÃO
 
