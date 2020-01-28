@@ -12,21 +12,21 @@ router.get('/', verificaAutenticacao, function (req, res) {
 router.get('/feed', verificaAutenticacao, function (req, res) {
   axios.get('http://localhost:5003/publicacoes?grupo=semgrupo')
     .then(dados => {
-      dados.data.forEach(function(element,index) {
+      dados.data.forEach(function (element, index) {
         var token = jwt.sign({}, "umshare",
-        {
-          expiresIn: 3000,
-          issuer: "Servidor UMShare"
-        })
+          {
+            expiresIn: 3000,
+            issuer: "Servidor UMShare"
+          })
         axios.get('http://localhost:5003/utilizadores/' + element.utilizador + '?token=' + token)
           .then(dados3 => {
             element.utilizador = dados3.data.nome + ' ( ' + dados3.data.email + ' )';
-            element.comentarios.forEach(function(comentario, index2) {
+            element.comentarios.forEach(function (comentario, index2) {
               var token = jwt.sign({}, "umshare",
-              {
-                expiresIn: 3000,
-                issuer: "Servidor UMShare"
-              })
+                {
+                  expiresIn: 3000,
+                  issuer: "Servidor UMShare"
+                })
               axios.get('http://localhost:5003/utilizadores/identifier/' + comentario.utilizador + '?token=' + token)
                 .then(dados2 => {
                   comentario.nome_user = dados2.data.nome + ' ( ' + dados2.data.email + ' )';
@@ -36,8 +36,8 @@ router.get('/feed', verificaAutenticacao, function (req, res) {
                 })
                 .catch(erro => console.log(erro))
             })
-        })
-        .catch(erro => console.log(erro))
+          })
+          .catch(erro => console.log(erro))
       });
     })
     .catch(erro => console.log(erro))

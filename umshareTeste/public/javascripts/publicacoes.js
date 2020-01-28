@@ -143,7 +143,7 @@ $(function () {
     })
 
     function showTabFeed(tag, tagr) {
-        /*console.log(tagr)
+        console.log(tagr)
         if (tag == "Sem tag") {
             console.log("no sem tag")
             var url = "/pubsComTag?metadata=semmd"
@@ -153,9 +153,9 @@ $(function () {
             console.log("no tag != undi")
             var url = "/pubsComTag?metadata=" + tag
         } else {
-            console.log("No else")*/
+            console.log("No else")
             var url = "/feed"
-        //}
+        }
         $('#publicacoesInsertZone').empty();
         $.ajax({
             url: url
