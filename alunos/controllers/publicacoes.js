@@ -26,6 +26,7 @@ module.exports.filtrar_grupo = grupo => {
 module.exports.filtrar_sem_grupo = () => {
     return Publicacao
         .find({ grupo: "" })
+        .sort({ "data": - 1 })
         .exec()
 }
 
@@ -43,7 +44,7 @@ module.exports.filtrar_utilizador = utilizador => {
 module.exports.filtrar_pubs_metadata = (md) => {
     return Publicacao
         .aggregate(
-            [{ $unwind: "$metadata" }, { $match: { 'metadata': md, grupo: '' } }]
+            [{ $unwind: "$metadata" }, { $match: { 'metadata': md, grupo: '' } }, { $sort: { data: -1 } }]
         )
 }
 
