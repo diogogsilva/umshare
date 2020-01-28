@@ -41,6 +41,11 @@ block content
           input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
       button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hidePublicacaoForm' style="width:100%") Esconder
       button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoForm' style="width:100%") Nova publicação
+      
+      div.w3-margin-left.w3-margin-top(id="searchZone")
+        //span.w3-tag.w3-black.w3-margin-bottom Travel
+      span.w3-tag.w3-light-grey.w3-medium.w3-margin-bottom.w3-border(id="tagSpan" style="display:none")
+      
       div(id="publicacoesInsertZone")
 
     div(id="gruposLayout")
@@ -111,17 +116,18 @@ block content
           .w3-card-4.w3-margin.w3-white(id="t")
 
       div(id="pub" style="display:none") 
-        .w3-card-4.w3-padding.w3-margin-bottom(id="" )
+        .w3-card.w3-padding(id="" )
           button.w3-right.w3-margin-top.delete-button(id="removePublicacaoBtn") X
           h5
-            p(id="metadataPub")
+            p(id="metadataPub" style="text-decoration: underline")
           h3
             p(id="conteudoPub")
           h5
             p(id="dataPub")
           h5
             p.w3-hide(id="idPub")
-        div(id="comentZone" style="display:none")
+        div.w3-card.w3-padding(id="fileZone" style="display:none")
+        div.w3-padding(id="comentZone" style="display:none")
 
       .w3-container.w3-border.w3-border-black.w3-white.w3-margin.w3-margin-bottom(id="templateComentarios" style="display:none")
         button.w3-right.w3-margin-top.delete-button(id="apagaComentarioBtn") X
@@ -174,6 +180,11 @@ block content
                 p(id="emailPerfil")
       
       h4.w3-margin(id="titComentarios" style="display:none") Comentários
+
+      h5(id="fileNamePub" style="display:none")
+        p(id="fileNamePubp")
+
+      .w3-card-4.modal(id='display' style="display:none")
 
   script.
     $(document).ready(function () {

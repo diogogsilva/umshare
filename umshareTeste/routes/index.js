@@ -105,15 +105,15 @@ router.post('/login', passport.authenticate('local', {
 
 router.post('/grupos', verificaAutenticacao, function (req, res) {
   console.log(req.body);
-  if(req.body.nome != undefined && req.body.descricao != undefined && req.body.admin != undefined && req.body.membros != undefined) {
+  if (req.body.nome != undefined && req.body.descricao != undefined && req.body.admin != undefined && req.body.membros != undefined) {
     axios.post('http://localhost:5003/grupos/', {
       nome: req.body.nome,
       descricao: req.body.descricao,
       admin: req.body.admin,
       membros: req.body.membros
     })
-    .then(dados => res.jsonp({ "status": "ok", "msg": "Grupo criado com sucesso!" }))
-    .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+      .then(dados => res.jsonp({ "status": "ok", "msg": "Grupo criado com sucesso!" }))
+      .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
   }
 })
 
@@ -238,6 +238,20 @@ router.post('/removerPublicacao', function (req, res) {
 
 })
 
+
+router.get('/tagsPubsUser', function (req, res) {
+  axios.get('http://localhost:5003/publicacoes/tags/' + req.user.email)
+    .then(dados => res.json(dados.data))
+    .catch(erro => console.log(erro))
+});
+
+router.get('/pubsComTag', function (req, res) {
+  console.log(req.query.metadata)
+  axios.get('http://localhost:5003/publicacoes?metadata=' + req.query.metadata + "&utilizador=" + req.user.email)
+    .then(dados => res.json(dados.data))
+    .catch(erro => console.log(erro))
+});
+
 function verificaAutenticacao(req, res, next) {
   if (req.isAuthenticated()) {
     console.log("verificou a autenticação!")
@@ -247,5 +261,7 @@ function verificaAutenticacao(req, res, next) {
     res.redirect("/login");
   }
 }
+
+
 
 module.exports = router;
