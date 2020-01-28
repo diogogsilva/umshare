@@ -143,7 +143,7 @@ $(function () {
     })
 
     function showTabFeed(tag, tagr) {
-        console.log(tagr)
+        /*console.log(tagr)
         if (tag == "Sem tag") {
             console.log("no sem tag")
             var url = "/pubsComTag?metadata=semmd"
@@ -153,14 +153,15 @@ $(function () {
             console.log("no tag != undi")
             var url = "/pubsComTag?metadata=" + tag
         } else {
-            console.log("No else")
+            console.log("No else")*/
             var url = "/feed"
-        }
+        //}
         $('#publicacoesInsertZone').empty();
         $.ajax({
             url: url
         })
             .done(function (data) {
+                console.log(data);
                 $('#gruposLayout').hide();
                 $('#grupoLayout').hide();
                 $('#publicacoesLayout').show();
@@ -219,14 +220,12 @@ $(function () {
                     comentzone.empty();
 
                     if (item.comentarios.length > 0) {
-                        //$("#titComentarios").attr("style", "")
-                        //$("#titComentarios").appendTo(comentzone)
                         comentzone.append('<h4 style="font-weight:bold">Comentários</h4')
                         item.comentarios.forEach(function (itemc) {
                             var comClone = $('#templateComentarios').clone(true);
                             comClone.attr("style", "");
                             comClone.find('#conteudoCom').text(itemc.conteudo);
-                            comClone.find('#utilizadorCom').text("Comentado por: " + itemc.utilizador + " Buscar o nome?");
+                            comClone.find('#utilizadorCom').text("Comentado por: " + itemc.nome_user);
                             comClone.find('#dataCom').text(itemc.data);
                             comClone.find('#idCom').text(itemc._id);
                             comClone.find('#idPub').text(item._id);

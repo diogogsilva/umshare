@@ -5,7 +5,32 @@ $(function () {
         if(!$('#tabGrupos').hasClass('active')){
             reloadGrupos();
         }
-      });
+    });
+
+    $('#addfileGrupo').click(e => {
+        e.preventDefault();
+
+        var val = $("#publicacaoGrupoForm").find("#f1 #ficheiro").filter(":hidden").length
+
+        if (val == 1) {
+            $("#publicacaoGrupoForm").find("#f1 #ficheiro:first").show()
+        } else {
+            var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro", id: "ficheiro" })
+            $("#publicacaoGrupoForm").find('#f1').append(ficheiroInput);
+        }
+    })
+
+    $("#removefileGrupo").click(e => {
+        e.preventDefault()
+        var val = $("#publicacaoGrupoForm").find("#f1 #ficheiro").length
+        var fInput = $("#publicacaoGrupoForm").find("#f1 #ficheiro:last")
+        if (val == 1) {
+            fInput.hide()
+            fInput.val('')
+        } else {
+            fInput.remove()
+        }
+    })
 
     function reloadGrupos() {
         $('#gruposInsertZone').empty();
@@ -36,7 +61,6 @@ $(function () {
                     pertenceAoGrupo = true;
                 }
             })
-            console.log('GRUPO: ' + item.descricao)
             if(pertenceAoGrupo) {
                 clone.find('#'+ item._id).addClass('grupo-container');
                 clone.appendTo("#gruposInsertZone");
