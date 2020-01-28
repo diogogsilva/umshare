@@ -9,9 +9,27 @@ $(function () {
 
     $('#addfile').click(e => {
         e.preventDefault()
-        var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro" })
 
-        $('#f1').append(ficheiroInput);
+        var val = $("#publicacaoForm").find("#f1 #ficheiro").filter(":hidden").length
+
+        if (val == 1) {
+            $("#publicacaoForm").find("#f1 #ficheiro:first").show()
+        } else {
+            var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro", id: "ficheiro" })
+            $('.f1').append(ficheiroInput);
+        }
+    })
+
+    $("#removefile").click(e => {
+        e.preventDefault()
+        var val = $("#publicacaoForm").find("#f1 #ficheiro").length
+        var fInput = $("#publicacaoForm").find("#f1 #ficheiro:last")
+        if (val == 1) {
+            fInput.hide()
+            fInput.val('')
+        } else {
+            fInput.remove()
+        }
     })
 
     var close = document.getElementsByClassName("closebtn");
@@ -400,6 +418,5 @@ $(function () {
         console.log(tag + ", " + tagr)
         showTabFeed(tag, tagr)
     })
-
 
 })

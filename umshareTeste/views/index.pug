@@ -31,9 +31,11 @@ block content
           input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto" required)
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="grupo" value='')        
-          .w3-cell-row(id="f1")
+          .w3-cell-row(id="f1" class="f1")
+            h5(style="font-size:15px").w3-left Adicione os ficheiros que deseja partilhar
             input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")
           button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfile') Adicionar outro ficheiro
+          button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top.w3-margin-left(id='removefile') Remover ficheiro
           input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
       button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hidePublicacaoForm' style="width:100%") Esconder
       button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoForm' style="width:100%") Nova publicação
