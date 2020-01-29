@@ -37,7 +37,6 @@ $(function () {
             clone.html(x);
             clone.appendTo("#navBar");
     })
-    eventContainer();
     });
 }
 
@@ -181,13 +180,34 @@ $('.btnConversas').click(event => {
     })
 });
 
-$('#addAluno').click(e => {
+/*$('#addAluno').click(e => {
     e.preventDefault()
 
-    var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'text', name: "membros", placeholder: "aluno (Exemplo: exemplo@exemplo.pt)" })
+    var val = $("#addConversaForm").find("#f2 #membros").filter(":hidden").length
 
-    $('#f2').append(ficheiroInput);
+    if(val == 1){
+        $("#addConversaForm").find("#f2 #membros:first").show()
+    } else {
+        var ficheiroInput = '<input class="w3-input w3-cell w3-border" type="text" name="membros" placeholder="aluno (Exemplo: exemplo@exemplo.pt)" required/>'
+        $("#addConversaForm").find('#f2').append(ficheiroInput);
+    }
+
+    //$('<input/>', { class: 'w3-input w3-cell', type: 'text', name: "membros", placeholder: "aluno (Exemplo: exemplo@exemplo.pt)", required })
+
+    //$('#f2').append(ficheiroInput);
 })
+
+$("#removeAluno").click(e => {
+    e.preventDefault()
+    var val = $("#addConversaForm").find("#f2 #membros").length
+    var fInput = $("#addConversaForm").find("#f2 #membros:last")
+    if (val == 1) {
+        fInput.hide()
+        fInput.val('')
+    } else {
+        fInput.remove()
+    }
+})*/
 
 
 $('#txtmessage').click(e => {

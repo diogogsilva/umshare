@@ -257,10 +257,11 @@ block content
           div(id="div")
             form(action="/conversas" method="POST" enctype='multipart/form-data' id="addConversaForm").w3-container.w3-center.w3-padding-16.w3-border
               h4.w3-left Criar Nova Conversa
-              input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="membros" placeholder="aluno (Exemplo: exemplo@exemplo.pt)" required)
               .w3-cell-row(id="f2")
+                input.w3-input.w3-cell.w3-border.membros(type="text" id="membros" placeholder="aluno (Exemplo: exemplo@exemplo.pt)" required)
               input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
-              button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addAluno') Adicionar outro Aluno   
+              //button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addAluno') Adicionar aluno  
+              //button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='removeAluno') Remover aluno   
               input.w3-input.w3-hover-shadow.w3-center.colorButtons(type="submit" value="Criar Conversa" id="btnCriarConversa")
           button.w3-button.w3-hover-shadow.w3-large.w3-black(id='hideConversaForm' style="width:100%") Esconder
           button.w3-button.w3-hover-shadow.w3-large.w3-black.w3-hide(id='showConversaForm' style="width:100%") Nova Conversa
@@ -270,24 +271,24 @@ block content
                   b(style="") Minhas Conversas
                   button.w3-bar-item.w3-button(onclick="" class="btnConversas" id="btnConversa" style="display:none") 
 
-          .container
-            .w3-row
-                .w3-card.w3-margin
-                  .panel.panel-default
-                    .panel-heading #{title}
-                      .js-userjoined
-                      .js-usersinchat
-                      .typing
-                    .panel-body
-                      .container#messages
-                        .row.message-bubble
-                      .panel-footer
-                          form(action="/mensagem", id="enviarMensagem" method="POST")
-                            .input-group
-                              input#txtmessage.form-control(type='text' name='mensagem')
-                              input.form-control(type='hidden' name='cid')
-                              span.input-group-btn
-                                  button#sendmessage.btn.btn-default(type='submit' class="btnEnviarMensagem") Enviar
+                  .container
+                    .w3-row
+                        .w3-card.w3-margin
+                          .panel.panel-default
+                            .panel-heading
+                              .js-userjoined
+                              .js-usersinchat
+                              .typing
+                            .panel-body
+                              .container#messages
+                                .row.message-bubble
+                              .panel-footer
+                                  form(action="/mensagem", id="enviarMensagem" method="POST")
+                                    .input-group
+                                      input#txtmessage.form-control(type='text' name='mensagem')
+                                      input.form-control(type='hidden' name='cid')
+                                      span.input-group-btn
+                                          button#sendmessage.btn.btn-default(type='submit' class="btnEnviarMensagem") Enviar
 
 
         
