@@ -142,14 +142,13 @@ $(function () {
 
                 var comentzone = Clone.find('#comentZone')
                 comentzone.empty();
-
                 if(publicacao.comentarios.length > 0) {
                     comentzone.append('<h4 style="font-weight:bold">Comentários</h4>')
                     publicacao.comentarios.forEach(function(itemc){
                         var comClone = $('#templateComentariosGrupo').clone(true);
                         comClone.attr("style", "");
                         comClone.find('#conteudoCom').text(itemc.conteudo);
-                        comClone.find('#utilizadorCom').text("Comentado por: " + itemc.utilizador + " Buscar o nome?");
+                        comClone.find('#utilizadorCom').text("Comentado por: " + itemc.nome_user);
                         comClone.find('#dataCom').text(itemc.data);
                         comClone.find('#idCom').text(itemc._id);
                         comClone.find('#idPub').text(publicacao._id);

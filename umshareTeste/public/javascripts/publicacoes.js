@@ -143,25 +143,20 @@ $(function () {
     })
 
     function showTabFeed(tag, tagr) {
-        /*console.log(tagr)
         if (tag == "Sem tag") {
-            console.log("no sem tag")
             var url = "/pubsComTag?metadata=semmd"
         } else if (tagr == "Mostrar tudo") {
             var url = "/feed"
         } else if (tag != undefined) {
-            console.log("no tag != undi")
             var url = "/pubsComTag?metadata=" + tag
         } else {
-            console.log("No else")*/
             var url = "/feed"
-        //}
+        }
         $('#publicacoesInsertZone').empty();
         $.ajax({
             url: url
         })
             .done(function (data) {
-                console.log(data);
                 $('#gruposLayout').hide();
                 $('#grupoLayout').hide();
                 $('#publicacoesLayout').show();
@@ -269,15 +264,12 @@ $(function () {
             })
 
         if (tag == undefined) {
-            console.log("Entrei")
             $('#tagSpan:contains("Mostrar tudo")').removeClass('w3-light-grey')
             $('#tagSpan:contains("Mostrar tudo")').addClass('w3-black')
-            $('#tagSpan:contains("Mostrar tudo")').click(console.log("Olá mundo  1 "))
             $('#tagSpan:contains("Mostrar tudo")').attr('style', "color:blue")
         } else {
             $('#tagSpan:contains("' + tagr + '")').removeClass('w3-light-grey')
             $('#tagSpan:contains("' + tagr + '")').addClass('w3-black')
-            $('#tagSpan:contains("' + tagr + '")').click(console.log("Olá mundo  2"))
             $('#tagSpan:contains("' + tagr + '")').attr('style', "color:blue")
         }
 
@@ -382,14 +374,12 @@ $(function () {
     })
 
     function showFileInfo(event) {
-        console.log(event.data.mimetype)
         var url = "http://localhost:5003/publicacoes/getFicheiro"
 
         var fileName = $('<h5>' + event.data.fileName + '</h5>')
         var fileSize = $('<h5> Tamanho: ' + event.data.size + ' Bytes' + '</h5>')
 
         var data = "pubid=" + event.data.pubid + "&fileName=" + event.data.fileName
-        console.log(data)
 
 
 
@@ -400,7 +390,6 @@ $(function () {
         //}
         var download = $('<div><a href="http://localhost:5003/publicacoes/getFicheiro?pubid=' + event.data.pubid + '&fileName=' + event.data.fileName + '">Download</a></div>')
 
-        console.log(download)
         //var ficheiro = $('<p>' + JSON.stringify(f) + '</p>')
         //var download = $('<div><a href="/download/' + f.name + '">Download</a></div>')
         $("#display").empty()
@@ -414,7 +403,6 @@ $(function () {
         var tagr = tag
         tag = tag.substring(0, tag.indexOf('('));
         tag = tag.substring(0, tag.length - 1);
-        console.log(tag + ", " + tagr)
         showTabFeed(tag, tagr)
     })
 

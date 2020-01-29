@@ -3,7 +3,7 @@ extends layout
 block content
   style.
     body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
-  .w3-content(style='max-width:1400px')
+  .w3-content(style='max-width:1400px; background-color:#C8EFF9')
     div.alert.w3-red(id="divAlertWarning" style="opacity:0")
       span.closebtn &times;
       strong(id="msgWarning")
@@ -14,8 +14,8 @@ block content
       h1
         b UM SHARE
       p
-        | Welcome to the blog of 
-        span.w3-tag unknown
+        | Partilha os teus 
+        span.w3-tag|apontamentos!
     .w3-row
       .topnav
         a.active(id="tabFeed") Feed
@@ -27,8 +27,8 @@ block content
       div(id="divPublicacaoForm")
         form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoForm").w3-container.w3-center.w3-padding-16.w3-border
           h4.w3-left Publicação
-          input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
-          input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto" required)
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Conteúdo" required)
+          input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Hashtags (Ex: dweb2019, mei)")
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="grupo" value='')        
           .w3-cell-row(id="f1" class="f1")
@@ -36,13 +36,13 @@ block content
             input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")
           button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfile') Adicionar outro ficheiro
           button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top.w3-margin-left(id='removefile') Remover ficheiro
-          input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hidePublicacaoForm' style="width:100%") Esconder
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoForm' style="width:100%") Nova publicação
+          input.w3-input.w3-hover-shadow.w3-center.colorButtons(type="submit" value="Publicar" id="btnPublicar")
+      button.w3-button.w3-hover-shadow.w3-large.w3-black(id='hidePublicacaoForm' style="width:100%") Esconder
+      button.w3-button.w3-hover-shadow.w3-large.w3-black.w3-hide(id='showPublicacaoForm' style="width:100%") Nova publicação
       
       div.w3-margin-left.w3-margin-top(id="searchZone")
         //span.w3-tag.w3-black.w3-margin-bottom Travel
-      span.w3-tag.w3-light-grey.w3-medium.w3-margin-bottom.w3-border(id="tagSpan" style="display:none")
+      span.w3-tag.w3-medium.w3-margin-bottom.w3-border(id="tagSpan" style="display:none")
       
       div(id="publicacoesInsertZone")
 
@@ -54,9 +54,9 @@ block content
           input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="descricao" placeholder="Breve descrição" required)
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" id="admin" name="admin" value=user required)
           input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(type="text" name="membros" value=user required)        
-          input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Criar")
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hideGrupoForm' style="width:100%") Esconder
-      button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showGrupoForm' style="width:100%") Mostrar
+          input.w3-input.w3-hover-shadow.w3-center.colorButtons(type="submit" value="Criar")
+      button.w3-button.w3-hover-shadow.w3-large.w3-black(id='hideGrupoForm' style="width:100%") Esconder
+      button.w3-button.w3-hover-shadow.w3-large.w3-black.w3-hide(id='showGrupoForm' style="width:100%") Mostrar
       div
         h5.w3-margin-left(id="headerGruposInsertZone" style="display: none;") Os teus grupos
         .w3-row(id="gruposInsertZone")
@@ -102,17 +102,17 @@ block content
             div(id="divPublicacaoGrupoForm")
               form(action="http://localhost:5003/publicacoes" method="POST" enctype='multipart/form-data' id="publicacaoGrupoForm").w3-container.w3-center.w3-padding-16.w3-border
                 h4.w3-left Nova Publicação
-                input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Metadata? (Exemplo: SSI,TESTE)")
-                input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Texto" required)
+                input.w3-input.w3-cell.w3-border.w3-margin-bottom(id="conteudo" type="text" name="conteudo" placeholder="Conteúdo" required)
+                input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="metadata" placeholder="Hashtags (Ex: dweb2019, mei)")
                 input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
                 input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide.gid(type="text" name="grupo")        
                 .w3-cell-row(id="f1")
                   input.w3-input.w3-cell(type="file" id="ficheiro" name="ficheiro")
                 button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addfileGrupo') Adicionar outro ficheiro
                 button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top.w3-margin-left(id='removefileGrupo') Remover ficheiro
-                input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Publicar" id="btnPublicar")
-            button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hidePublicacaoGrupoForm' style="width:100%") Esconder
-            button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showPublicacaoGrupoForm' style="width:100%") Nova publicação
+                input.w3-input.w3-hover-shadow.w3-center.colorButtons(type="submit" value="Publicar" id="btnPublicar")
+            button.w3-button.w3-hover-shadow.w3-large.w3-black(id='hidePublicacaoGrupoForm' style="width:100%") Esconder
+            button.w3-button.w3-hover-shadow.w3-large.w3-black.w3-hide(id='showPublicacaoGrupoForm' style="width:100%") Nova publicação
           div(id="grupoInsertZone")
           
 
@@ -120,7 +120,7 @@ block content
       div(id="perfilInsertZone")
 
 
-  footer.w3-container.w3-dark-grey.w3-padding-32.w3-margin-top
+  footer.w3-container.w3-padding-32.w3-margin-top(style="background-color:#C8EFF9")
     p
       | DWEB 2019/2020 
       a(href='https://github.com/diogogsilva/umshare' target='_blank') GitHub
@@ -161,11 +161,12 @@ block content
         form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(action="/comentar" method="POST" id="comentarioForm")
           input.w3-input.w3-cell.w3-border(type="hidden" name="pubid" id="pubidForm")
           input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário" required)
-          input.w3-button.w3-round-large.w3-indigo.w3-margin-top.w3-input.w3-indigo(type="submit" value="Comentar")
+          input.w3-input.w3-hover-shadow.w3-center.colorButtons.w3-margin-top(type="submit" value="Comentar")
+
       
       div(id="divHideButton" style="display:none")
-        button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='hideComentarioForm' style="width:100%") Esconder
-        button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='showComentarioForm' style="width:100%") Comentários
+        button.w3-button.w3-hover-shadow.w3-large.w3-black.w3-hide(id='hideComentarioForm' style="width:100%") Esconder
+        button.w3-button.w3-hover-shadow.w3-large.w3-black(id='showComentarioForm' style="width:100%") Comentários
 
 
       .w3-col.l6(id="templateGrupos" style="display:none")
@@ -223,11 +224,11 @@ block content
         form.w3-container.w3-borders.w3-border-indigo.w3-margin-top(action="/comentar" method="POST" id="comentarioGrupoForm")
           input.w3-input.w3-cell.w3-border(type="hidden" name="pubid" id="pubidForm")
           input.w3-input.w3-cell.w3-border(type="text" name="conteudo" placeholder="Escreva aqui o seu comentário" required)
-          input.w3-button.w3-round-large.w3-indigo.w3-margin-top.w3-input.w3-indigo(type="submit" value="Comentar")
+          input.w3-input.w3-hover-shadow.w3-center.colorButtons.w3-margin-top(type="submit" value="Comentar")
       
       div(id="divHideButtonGrupo" style="display:none")
-        button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='hideComentarioGrupoForm' style="width:100%") Esconder
-        button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='showComentarioGrupoForm' style="width:100%") Comentários
+        button.w3-button.w3-hover-shadow.w3-large.w3-black.w3-hide(id='hideComentarioGrupoForm' style="width:100%") Esconder
+        button.w3-button.w3-hover-shadow.w3-large.w3-black(id='showComentarioGrupoForm' style="width:100%") Comentários
 
 
 
