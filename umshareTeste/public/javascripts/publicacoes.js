@@ -134,9 +134,11 @@ $(function () {
             $('#grupoLayout').hide();
             $('#publicacoesLayout').show();
             $('#perfilLayout').hide();
+            $('#mensagensLayout').hide();
             $('#tabGrupos').removeClass('active');
             $('#tabFeed').addClass('active');
             $('#tabPerfil').removeClass('active');
+            $('#tabMensagens').removeClass('active');
             data.forEach(function(item){
                 var Clone = $('#templatePublicacoes #idk #t').clone(true);
                 var pubClone = $('#pub').clone(true);

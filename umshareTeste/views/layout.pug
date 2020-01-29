@@ -1,6 +1,7 @@
 doctype html
 html
   head
+    link(rel='stylesheet', href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css')
     link(rel='stylesheet', href='/stylesheets/style.css')
     title UMShare
     meta(charset='UTF-8')
@@ -10,5 +11,8 @@ html
     script(src='/javascripts/jquery-3.4.1.min.js')
     script(src='/javascripts/publicacoes.js')
     script(src='/javascripts/grupos.js')
+    script(src='/javascripts/conversas.js')
+
   body
     block content
+    script(src='/socket.io/socket.io.js')

@@ -83,6 +83,44 @@ router.get('/perfil', verificaAutenticacao, function (req, res) {
     .catch(erro => console.log(erro))
 });
 
+router.get('/conversas', function (req, res) {
+  axios.get('http://localhost:5003/conversas?email=' + req.user.email)
+    .then(dados => res.json(dados.data))
+    .catch(erro => console.log(erro))
+});
+
+router.post('/conversas', function (req, res) {
+  console.log(typeof req.body.membros)
+  if(req.body.membros != undefined ) {
+    if(typeof req.body.membros === typeof "string"){
+      req.body.membros = [req.body.membros, req.user.email]
+    }else{
+      req.body.membros.push(req.user.email)
+    }
+    axios.post('http://localhost:5003/conversas/', {
+      membros: req.body.membros
+    })
+    .then(dados => res.jsonp({ "status": "ok", "msg": "Conversa criada com sucesso!" }))
+    .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+  }
+})
+
+router.post('/mensagem', function (req, res) {
+    axios.post('http://localhost:5003/conversas/mensagem', {
+      cid: req.body.cid,
+      mensagem: req.body.mensagem,
+      utilizadorRemetente: req.user.email
+    })
+    .then(dados => res.jsonp(dados))
+    .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+})
+
+router.get('/mensagem/:id', function (req, res) {
+  axios.get('http://localhost:5003/conversas/' + req.params.id)
+  .then(dados => res.jsonp(dados.data))
+  .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+})
+
 router.get('/logout', verificaAutenticacao, function (req, res) {
   req.logout()
   res.redirect('/')

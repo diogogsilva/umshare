@@ -20,6 +20,7 @@ block content
       .topnav
         a.active(id="tabFeed") Feed
         a(id="tabGrupos") Grupos
+        a(id="tabMensagens") Mensagens
         a.w3-right(href="/logout") Terminar Sessão
         a.w3-right(id="tabPerfil") Perfil
         //.search-container
@@ -99,6 +100,8 @@ block content
     div(id="perfilLayout")
       div(id="perfilInsertZone")
 
+    div(id="mensagensLayout")
+        div(id="mensagensInsertZone")
 
   footer.w3-container.w3-dark-grey.w3-padding-32.w3-margin-top
     p
@@ -168,11 +171,54 @@ block content
         .w3-col.l8.s12
           .w3-card-4.w3-margin.w3-white
             .w3-container
-              h3
-                p(id="nomePerfil")
-              h5
-                p(id="emailPerfil")
-      
+              .w3-card.w3-margin
+                .w3-container.w3-padding.w3-dark-grey
+                  h5 Nome do Aluno
+                  p(id="nomePerfil")
+                .w3-container.w3-blue
+                  h5 Email do Aluno
+                  p(id="emailPerfil")
+
+            
+
+      .w3-row(id="templateMensagens" style="display:none")
+          div(id="div")
+            form(action="/conversas" method="POST" enctype='multipart/form-data' id="addConversaForm").w3-container.w3-center.w3-padding-16.w3-border
+              h4.w3-left Criar Nova Conversa
+              input.w3-input.w3-cell.w3-border.w3-margin-bottom(type="text" name="membros" placeholder="aluno (Exemplo: exemplo@exemplo.pt)" required)
+              .w3-cell-row(id="f2")
+              input.w3-input.w3-cell.w3-border.w3-margin-bottom.w3-hide(id="utilizador" type="text" name="utilizador" value=user required)
+              button.w3-button.w3-round-large.w3-indigo.w3-left.w3-margin-bottom.w3-margin-top(id='addAluno') Adicionar outro Aluno   
+              input.w3-input.w3-hover-shadow.w3-center(type="submit" value="Criar Conversa" id="btnCriarConversa")
+          button.w3-button.w3-hover-shadow.w3-large.w3-grey(id='hideConversaForm' style="width:100%") Esconder
+          button.w3-button.w3-hover-shadow.w3-large.w3-grey.w3-hide(id='showConversaForm' style="width:100%") Nova Conversa
+          .w3-row
+            .w3-card.w3-margin
+                nav.w3-sidebar.w3-bar-block.w3-light-grey(id="navBar" style='width:120px')
+                  b(style="") Minhas Conversas
+                  button.w3-bar-item.w3-button(onclick="" class="btnConversas" id="btnConversa" style="display:none") 
+
+          .container
+            .w3-row
+                .w3-card.w3-margin
+                  .panel.panel-default
+                    .panel-heading #{title}
+                      .js-userjoined
+                      .js-usersinchat
+                      .typing
+                    .panel-body
+                      .container#messages
+                        .row.message-bubble
+                      .panel-footer
+                          form(action="/mensagem", id="enviarMensagem" method="POST")
+                            .input-group
+                              input#txtmessage.form-control(type='text' name='mensagem')
+                              input.form-control(type='hidden' name='cid')
+                              span.input-group-btn
+                                  button#sendmessage.btn.btn-default(type='submit' class="btnEnviarMensagem") Enviar
+
+
+        
       h4.w3-margin(id="titComentarios" style="display:none") Comentários
 
   script.
@@ -188,9 +234,11 @@ block content
             $('#gruposLayout').hide();
             $('#grupoLayout').hide();
             $('#perfilLayout').show();
+            $('#mensagensLayout').hide();
             $('#tabFeed').removeClass('active');
             $('#tabGrupos').removeClass('active');
             $('#tabPerfil').addClass('active');
+            $('#tabMensagens').removeClass('active');
             var clone = $('#templatePerfil').clone(true);
             clone.attr("style", "");
             clone.find('#nomePerfil').text(data.nome);
