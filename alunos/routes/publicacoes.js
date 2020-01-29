@@ -77,7 +77,8 @@ router.get('/', function (req, res) {
 
 router.post('/', upload.array('ficheiro'), function (req, res) {
     //console.log(req.files)
-    var data = new Date()
+    var data = DataAtual()
+    console.log(data)
     req.body.metadata = req.body.metadata.toLowerCase()
     var metad = req.body.metadata.split(',')
 
@@ -99,7 +100,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
 
                 let novoFicheiro = new Ficheiro(
                     {
-                        dataupload: data.toISOString(),
+                        dataupload: data,
                         designacao: req.files[i].originalname,
                         mimetype: req.files[i].mimetype,
                         size: req.files[i].size
@@ -116,7 +117,7 @@ router.post('/', upload.array('ficheiro'), function (req, res) {
             utilizador: req.body.utilizador,
             metadata: metad,
             grupo: req.body.grupo,
-            data: data.toISOString()
+            data: data
         })
     //console.log(ficheiros)
     Publicacoes.inserir(novaPublicacao)
@@ -171,13 +172,13 @@ router.delete('/:id', function (req, res) {
 router.post('/adicionarComentario', function (req, res) {
     // if ?? 
     if (req.body.pubid != undefined) {
-        var date = new Date();
+        var date = DataAtual();
 
         var comentario = new Comentario(
             {
                 conteudo: req.body.conteudo,
                 utilizador: req.body.utilizadorid,
-                data: date.toISOString()
+                data: date
             })
         console.log(comentario)
 
@@ -213,6 +214,19 @@ function hasDuplicates(a) {
         }
     }
     return false;
+}
+
+function DataAtual() {
+    var dataAtual = new Date();
+    var dia = (dataAtual.getDate() < 10 ? '0' : '') + dataAtual.getDate();
+    var mes = ((dataAtual.getMonth() + 1) < 10 ? '0' : '') + (dataAtual.getMonth() + 1);
+    var ano = dataAtual.getFullYear();
+    var hora = (dataAtual.getHours() < 10 ? '0' : '') + dataAtual.getHours();
+    var minuto = (dataAtual.getMinutes() < 10 ? '0' : '') + dataAtual.getMinutes();
+    var segundo = (dataAtual.getSeconds() < 10 ? '0' : '') + dataAtual.getSeconds();
+
+    var dataFormatada = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo;
+    return dataFormatada;
 }
 
 
