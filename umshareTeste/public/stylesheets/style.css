@@ -138,11 +138,12 @@
 
 .message-bubble 
 {
-    padding: 10px 0px 10px 0px;
+    max-width: 1000px;
+    border-color: #3d6da7 !important;
+    border-radius: 10px !important;
 }
 
-.message-bubble:nth-child(even) {
-   background-color: #F5F5F5;     
+.message-bubble:nth-child(even) {  
    padding: 10px 0px 10px 0px;
 }
 

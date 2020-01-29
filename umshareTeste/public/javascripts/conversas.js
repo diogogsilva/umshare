@@ -88,7 +88,6 @@ function dataAtual(){
 
 $("#enviarMensagem").submit(function (e) {
     e.preventDefault();
-
     var form = $(this);
     var url = form.attr('action');
 
@@ -100,64 +99,33 @@ $("#enviarMensagem").submit(function (e) {
             console.log(response)
             var username = userInSession; 
             socket.emit('join', { username: username });
-            /*socket.on('user joined', function (data) {
-                $(".js-userjoined").html(data.username + ' Joined chat room');
-                console.log(data.users);
-                 $.each(data.users, function(index, user) { 
-                      console.log(user);
-                     $(".js-usersinchat").append('<span id ='+user+'>&nbsp;&nbsp;<strong>'+user+'</strong></span>');
-                 });
-             });
-             */
              socket.on('user disconnected', function (data) {
                 $("#"+data.username).remove();
              });
              
-            //an event emitted from server
+            var i = 0;
             socket.on('chat message', function (data) {
-             var string = '<div class="row message-bubble"><p class="text-muted"><b>Por: ' + data.username +'</b> - Em: ' + dataAtual() + '</p><p>'+ data.message +'</p></div>';
-              $('#messages').append(string);
-            });
-           /* $(function () {
-                var timeout;
-        
-                function timeoutFunction() {
-                    typing = false;
-                    socket.emit("typing", { message: '', username: '' });
-                }*/
-        
-               /*$('#txtmessage').keyup(function () {
-                   console.log('happening');
-                   typing = true;
-                   socket.emit('typing', { message: 'typing...', username: username});
-                   clearTimeout(timeout);
-                   timeout = setTimeout(timeoutFunction, 2000);
-               });*/
-          
-        
-           /* socket.on('typing', function (data) {
-                if (data.username && data.message) {
-                    $('.typing').html("User: " + data.username + ' ' + data.message);
-                } else {
-                    $('.typing').html("");
+                console.log('ENTROU AUQI')
+                if(i == 0) {
+                    var string = '<div class="row message-bubble"><p class="text-muted"><b>Por: ' + data.username +'</b> - Em: ' + dataAtual() + '</p><p>'+ data.message +'</p></div>';
+                    $('#messages').append(string);
+                    i++;
                 }
             });
-        });*/
-           /* var typing = false;
-            var timeout = undefined;
-            function timeoutFunction(){
-            typing = false;
-            socket.emit(noLongerTypingMessage);
-            }*/
+
+            var message = $("#txtmessage").val();
+            $("#txtmessage").val('');
+            $('.typing').html("");
+            socket.emit('new_message', { message: message, username: username });    
         
-            $("#sendmessage").on('click',function (e) {
+           /* $("#sendmessage").on('click',function (e) {
                 e.preventDefault();
                 var message = $("#txtmessage").val();
                 $("#txtmessage").val('');
                 $('.typing').html("");
                 socket.emit('new_message', { message: message, username: username });    
 
-                })
+                })*/
 
         }
     });
@@ -165,6 +133,7 @@ $("#enviarMensagem").submit(function (e) {
 
 
 $('.btnConversas').click(event => {
+    event.preventDefault();
     $.ajax({
         url: "/mensagem/" + event.currentTarget.id
     })
@@ -211,11 +180,11 @@ $("#removeAluno").click(e => {
 
 
 $('#txtmessage').click(e => {
+    e.preventDefault();
     var username = userInSession; 
     socket.emit('join', { username: username });
     socket.on('user joined', function (data) {
-        $(".js-userjoined").html(data.username + ' Joined chat room');
-        console.log(data.users);
+        $(".js-userjoined").html(data.username + ' está online!');
          /*$.each(data.users, function(index, user) { 
               console.log(user);
              $(".js-usersinchat").append('<span id ='+user+'>&nbsp;&nbsp;<strong>'+user+'</strong></span>');
@@ -235,7 +204,6 @@ $('#txtmessage').click(e => {
         }
 
        $('#txtmessage').keyup(function () {
-           console.log('happening');
            typing = true;
            socket.emit('typing', { message: 'typing...', username: username});
            clearTimeout(timeout);
