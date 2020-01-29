@@ -112,8 +112,13 @@ $(function () {
                 }
                 pubClone.find('#dataPub').text(publicacao.data);
                 pubClone.find('#idPub').text(publicacao._id);
+                var item_utilizador = publicacao.utilizador.substring(
+                    publicacao.utilizador.lastIndexOf("( ") + 1, 
+                    publicacao.utilizador.lastIndexOf(" )")
+                );
+                item_utilizador = item_utilizador.replace(/ /g,'');
                 var userInSession = $('#utilizador').val();
-                if(publicacao.utilizador != userInSession) {
+                if(item_utilizador != userInSession) {
                     pubClone.find('#removePublicacaoGrupoBtn').hide();
                 } else {
                     pubClone.find('#removePublicacaoGrupoBtn').show();
@@ -123,7 +128,7 @@ $(function () {
                     fileZone = pubClone.find('#fileZone')
                     fileZone.empty();
                     fileZone.attr("style", "")
-                    fileZone.append('<h4 style="font-weight:bold">Ficheiros partilhados</h4>')
+                    fileZone.append('<h5>Ficheiros partilhados:</h5>')
 
                     publicacao.ficheiros.forEach(function (itemf) {
                         var pubFileClone = $('#fileNamePub').clone(true)

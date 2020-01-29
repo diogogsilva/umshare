@@ -180,10 +180,15 @@ $(function () {
                     } else {
                         pubClone.find('#metadataPub').text("Tags: " + item.metadata);
                     }
-                    pubClone.find('#dataPub').text(item.data);
+                    pubClone.find('#dataPub').text(item.data);//dataAtual(item.data));
                     pubClone.find('#idPub').text(item._id);
+                    var item_utilizador = item.utilizador.substring(
+                        item.utilizador.lastIndexOf("( ") + 1, 
+                        item.utilizador.lastIndexOf(" )")
+                    );
+                    item_utilizador = item_utilizador.replace(/ /g,'');
                     var userInSession = $('#utilizador').val();
-                    if (item.utilizador != userInSession) {
+                    if (item_utilizador != userInSession) {
                         pubClone.find('#removePublicacaoBtn').hide();
                     } else {
                         pubClone.find('#removePublicacaoBtn').show()
@@ -193,7 +198,7 @@ $(function () {
                         fileZone = pubClone.find('#fileZone')
                         fileZone.empty();
                         fileZone.attr("style", "")
-                        fileZone.append('<h4 style="font-weight:bold">Ficheiros partilhados</h4')
+                        fileZone.append('<h5>Ficheiros partilhados:</h5>')
 
                         item.ficheiros.forEach(function (itemf) {
                             var pubFileClone = $('#fileNamePub').clone(true)
@@ -221,7 +226,7 @@ $(function () {
                             comClone.attr("style", "");
                             comClone.find('#conteudoCom').text(itemc.conteudo);
                             comClone.find('#utilizadorCom').text("Comentado por: " + itemc.nome_user);
-                            comClone.find('#dataCom').text(itemc.data);
+                            comClone.find('#dataCom').text(itemc.data);//dataAtual(itemc.data));
                             comClone.find('#idCom').text(itemc._id);
                             comClone.find('#idPub').text(item._id);
                             comClone.appendTo(comentzone);
@@ -244,7 +249,6 @@ $(function () {
         })
             .done(function (data) {
                 $("#searchZone").append("<h3>Tags</h3>")
-                // ?
                 var tagSpanClone = $('#tagSpan').clone(true);
                 tagSpanClone.attr("style", "")
                 tagSpanClone.text("Mostrar tudo")
@@ -405,5 +409,18 @@ $(function () {
         tag = tag.substring(0, tag.length - 1);
         showTabFeed(tag, tagr)
     })
+
+    /*function dataAtual(data){
+        var dataAtual = new Date(data);
+        var dia = (dataAtual.getDate()<10 ? '0' : '') + dataAtual.getDate();
+        var mes = ((dataAtual.getMonth() + 1)<10 ? '0' : '') + (dataAtual.getMonth() + 1);
+        var ano = dataAtual.getFullYear();
+        var hora = (dataAtual.getHours()<10 ? '0' : '') + dataAtual.getHours();
+        var minuto = (dataAtual.getMinutes()<10 ? '0' : '') + dataAtual.getMinutes();
+        var segundo = (dataAtual.getSeconds()<10 ? '0' : '') + dataAtual.getSeconds();
+    
+        var dataFormatada = dia + "/" + mes + "/" + ano + " " + hora + ":" + minuto + ":" + segundo;
+        return dataFormatada;
+    }*/
 
 })

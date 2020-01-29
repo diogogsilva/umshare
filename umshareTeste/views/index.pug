@@ -134,13 +134,13 @@ block content
         .w3-card-4.w3-padding.w3-margin-bottom
           button.w3-right.w3-margin-top.delete-button(id="removePublicacaoBtn") X
           h5
-            p(id="publicadorPub")
+            p(id="publicadorPub" style="display:inline;")
+            p(style="display:inline;") , às 
+            p(id="dataPub" style="display:inline;")
           h5
-            p(id="metadataPub" style="text-decoration: underline")
+            p(id="metadataPub")
           h3
             p(id="conteudoPub")
-          h5
-            p(id="dataPub")
           h5
             p.w3-hide(id="idPub")
         div.w3-card.w3-padding(id="fileZone" style="display:none")
@@ -197,13 +197,13 @@ block content
         .w3-card-4.w3-padding.w3-margin-bottom
           button.w3-right.w3-margin-top.delete-button(id="removePublicacaoGrupoBtn") X
           h5
-            p(id="publicadorPub")
+            p(id="publicadorPub" style="display:inline;")
+            p(style="display:inline;") , às 
+            p(id="dataPub" style="display:inline;")
           h5
-            p(id="metadataPub" style="text-decoration: underline")
+            p(id="metadataPub")
           h3
             p(id="conteudoPub")
-          h5
-            p(id="dataPub")
           h5
             p.w3-hide(id="idPub")
         div.w3-card.w3-padding(id="fileZone" style="display:none")
@@ -248,7 +248,7 @@ block content
       h4.w3-margin(id="titComentarios" style="display:none") Comentários
 
       h5(id="fileNamePub" style="display:none")
-        p(class="fileP" id="fileNamePubp")
+        p(class="fileP" style="text-decoration: underline;" id="fileNamePubp")
 
       .w3-card-4.modal(id='display' style="display:none")
 

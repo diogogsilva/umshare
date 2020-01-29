@@ -5,6 +5,7 @@ var Publicacao = require('../models/publicacoes')
 module.exports.listar = () => {
     return Publicacao
         .find()
+        .sort({data: -1})
         .exec()
 }
 
@@ -20,6 +21,7 @@ module.exports.filtrar = pid => {
 module.exports.filtrar_grupo = grupo => {
     return Publicacao
         .find({ grupo: grupo })
+        .sort({data: -1})
         .exec()
 }
 

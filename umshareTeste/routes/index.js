@@ -277,7 +277,6 @@ router.post('/comentar', function (req, res) {
     .catch(e => res.render('error', { error: e }))
 })
 
-
 router.post('/removerComentario', function (req, res) {
 
   axios.post('http://localhost:5003/publicacoes/removerComentario', {
@@ -291,7 +290,6 @@ router.post('/removerComentario', function (req, res) {
 })
 
 router.post('/removerPublicacao', function (req, res) {
-  console.log(req.body)
 
   axios.delete('http://localhost:5003/publicacoes/' + req.body.pubid)
     .then(dados =>
@@ -310,7 +308,38 @@ router.get('/tagsPubsUser', function (req, res) {
 
 router.get('/pubsComTag', function (req, res) {
   axios.get('http://localhost:5003/publicacoes?metadata=' + req.query.metadata)
-    .then(dados => res.json(dados.data))
+    .then(dados => {
+      dados.data.forEach(function (element, index) {
+        if(element.comentarios.length > 0) {
+          element.comentarios.forEach(function (comentario, index2) {
+            var token = jwt.sign({}, "umshare",
+              {
+                expiresIn: 3000,
+                issuer: "Servidor UMShare"
+              })
+            axios.get('http://localhost:5003/utilizadores/identifier/' + comentario.utilizador + '?token=' + token)
+              .then(dados2 => {
+                comentario.nome_user = dados2.data.nome + ' ( ' + dados2.data.email + ' )';
+              })
+              .catch(erro => console.log(erro))
+            })
+        }
+        var token = jwt.sign({}, "umshare",
+          {
+            expiresIn: 3000,
+            issuer: "Servidor UMShare"
+          })
+        axios.get('http://localhost:5003/utilizadores/' + element.utilizador + '?token=' + token)
+          .then(dados3 => {
+            element.utilizador = dados3.data.nome + ' ( ' + dados3.data.email + ' )';
+            if(index == dados.data.length -1) {
+              res.json(dados.data);
+            }
+            })
+          .catch(erro => console.log(erro))
+        
+        });
+    })
     .catch(erro => console.log(erro))
 });
 
@@ -323,6 +352,5 @@ function verificaAutenticacao(req, res, next) {
     res.redirect("/login");
   }
 }
-
 
 module.exports = router;
