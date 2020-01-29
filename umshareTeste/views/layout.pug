@@ -6,13 +6,16 @@ html
     title UMShare
     meta(charset='UTF-8')
     meta(name='viewport' content='width=device-width, initial-scale=1')
-    link(rel='stylesheet' href='https://www.w3schools.com/w3css/4/w3.css')
+    link(rel="stylesheet" href="/stylesheets/w3.css")
     link(rel='stylesheet' href='https://fonts.googleapis.com/css?family=Raleway')
     script(src='/javascripts/jquery-3.4.1.min.js')
     script(src='/javascripts/publicacoes.js')
     script(src='/javascripts/grupos.js')
     script(src='/javascripts/conversas.js')
 
+
+    script(src="/javascripts/jquery.modal.min.js")
+    link(rel="stylesheet" href="/stylesheets/jquery.modal.min.css")
   body
     block content
     script(src='/socket.io/socket.io.js')

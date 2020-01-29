@@ -12,6 +12,12 @@ module.exports.consultar = email => {
         .exec()
 }
 
+module.exports.consultarPorId = id => {
+    return Utilizador
+        .findById(id)
+        .exec()
+}
+
 module.exports.inserir = u => {
     var novo = new Utilizador(u)
     return novo.save()

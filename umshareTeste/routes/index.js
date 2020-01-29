@@ -11,7 +11,35 @@ router.get('/', verificaAutenticacao, function (req, res) {
 
 router.get('/feed', verificaAutenticacao, function (req, res) {
   axios.get('http://localhost:5003/publicacoes?grupo=semgrupo')
-    .then(dados => res.json(dados.data))
+    .then(dados => {
+      dados.data.forEach(function (element, index) {
+        var token = jwt.sign({}, "umshare",
+          {
+            expiresIn: 3000,
+            issuer: "Servidor UMShare"
+          })
+        axios.get('http://localhost:5003/utilizadores/' + element.utilizador + '?token=' + token)
+          .then(dados3 => {
+            element.utilizador = dados3.data.nome + ' ( ' + dados3.data.email + ' )';
+            element.comentarios.forEach(function (comentario, index2) {
+              var token = jwt.sign({}, "umshare",
+                {
+                  expiresIn: 3000,
+                  issuer: "Servidor UMShare"
+                })
+              axios.get('http://localhost:5003/utilizadores/identifier/' + comentario.utilizador + '?token=' + token)
+                .then(dados2 => {
+                  comentario.nome_user = dados2.data.nome + ' ( ' + dados2.data.email + ' )';
+                  if (index == dados.data.length - 1) {
+                    res.json(dados.data);
+                  }
+                })
+                .catch(erro => console.log(erro))
+            })
+        })
+          .catch(erro => console.log(erro))
+      });
+    })
     .catch(erro => console.log(erro))
 });
 
@@ -54,10 +82,49 @@ router.get('/grupo/:gid', verificaAutenticacao, function (req, res) {
                   dados3.push(dados.data)
                 }
                 if (index == dados1.membros.length - 1) {
-                  axios.get('http://localhost:5003/publicacoes?grupo=' + 123)//dados1._id) 
+                  axios.get('http://localhost:5003/publicacoes?grupo=' + req.params.gid)
                     .then(dados => {
-                      dados4 = dados.data;
-                      res.json({ grupo: dados1, admin: dados2, isAdmin: isAdmin, membros: dados3, publicacoes: dados4 })
+                      if (dados.data.length > 0) {
+                        dados4 = dados.data;
+                        dados4.forEach(function(publicacao, index) {
+                          var token = jwt.sign({}, "umshare",
+                          {
+                            expiresIn: 3000,
+                            issuer: "Servidor UMShare"
+                          })
+                          axios.get('http://localhost:5003/utilizadores/' + publicacao.utilizador + '?token=' + token)
+                            .then(dados5 => {
+                              publicacao.utilizador = dados5.data.nome + ' ( ' + dados5.data.email + ' )';
+                              if(publicacao.comentarios.length > 0) {
+                                publicacao.comentarios.forEach(function(comentario, index2) {
+                                  var token = jwt.sign({}, "umshare",
+                                  {
+                                    expiresIn: 3000,
+                                    issuer: "Servidor UMShare"
+                                  })
+                                  axios.get('http://localhost:5003/utilizadores/identifier/' + comentario.utilizador + '?token=' + token)
+                                    .then(dados6 => {
+                                      comentario.nome_user = dados6.data.nome + ' ( ' + dados6.data.email + ' )';
+                                      if (index == dados4.length - 1) {
+                                        res.json({ grupo: dados1, admin: dados2, isAdmin: isAdmin, membros: dados3, publicacoes: dados4 })
+                                      }
+                                    })
+                                    .catch(erro => console.log(erro))
+                                }) 
+                              }
+                              else {
+                                if (index == dados4.length - 1) {
+                                  setTimeout(function() {
+                                    res.json({ grupo: dados1, admin: dados2, isAdmin: isAdmin, membros: dados3, publicacoes: dados4 })
+                                  }, 200);
+                                }
+                              }
+                            })
+                            .catch(erro => console.log(erro))
+                          })
+                      } else {
+                        res.json({ grupo: dados1, admin: dados2, isAdmin: isAdmin, membros: dados3, publicacoes: [] })
+                      }
                     })
                     .catch(erro => console.log(erro))
                 }
@@ -142,16 +209,15 @@ router.post('/login', passport.authenticate('local', {
 }))
 
 router.post('/grupos', verificaAutenticacao, function (req, res) {
-  console.log(req.body);
-  if(req.body.nome != undefined && req.body.descricao != undefined && req.body.admin != undefined && req.body.membros != undefined) {
+  if (req.body.nome != undefined && req.body.descricao != undefined && req.body.admin != undefined && req.body.membros != undefined) {
     axios.post('http://localhost:5003/grupos/', {
       nome: req.body.nome,
       descricao: req.body.descricao,
       admin: req.body.admin,
       membros: req.body.membros
     })
-    .then(dados => res.jsonp({ "status": "ok", "msg": "Grupo criado com sucesso!" }))
-    .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
+      .then(dados => res.jsonp({ "status": "ok", "msg": "Grupo criado com sucesso!" }))
+      .catch(e => res.jsonp({ "status": "erro", "msg": "Algo correu mal!" }))
   }
 })
 
@@ -238,8 +304,6 @@ router.post('/reg', function (req, res) {
 })
 
 router.post('/comentar', function (req, res) {
-  console.log(req.body)
-  console.log(req.user)
   axios.post('http://localhost:5003/publicacoes/adicionarComentario', {
     pubid: req.body.pubid,
     conteudo: req.body.conteudo,
@@ -253,7 +317,6 @@ router.post('/comentar', function (req, res) {
 
 
 router.post('/removerComentario', function (req, res) {
-  console.log(req.body)
 
   axios.post('http://localhost:5003/publicacoes/removerComentario', {
     comid: req.body.comid,
@@ -276,6 +339,19 @@ router.post('/removerPublicacao', function (req, res) {
 
 })
 
+
+router.get('/tagsPubsUser', function (req, res) {
+  axios.get('http://localhost:5003/publicacoes/tags')
+    .then(dados => res.json(dados.data))
+    .catch(erro => console.log(erro))
+});
+
+router.get('/pubsComTag', function (req, res) {
+  axios.get('http://localhost:5003/publicacoes?metadata=' + req.query.metadata)
+    .then(dados => res.json(dados.data))
+    .catch(erro => console.log(erro))
+});
+
 function verificaAutenticacao(req, res, next) {
   if (req.isAuthenticated()) {
     console.log("verificou a autenticação!")
@@ -285,5 +361,6 @@ function verificaAutenticacao(req, res, next) {
     res.redirect("/login");
   }
 }
+
 
 module.exports = router;

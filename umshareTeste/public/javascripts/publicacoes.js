@@ -2,16 +2,34 @@
 $(function () {
 
     $("#tabFeed").on("click", function () {
-      if(!$('#tabFeed').hasClass('active')){
-        showTabFeed();
-      }
+        if (!$('#tabFeed').hasClass('active')) {
+            showTabFeed();
+        }
     });
 
     $('#addfile').click(e => {
         e.preventDefault()
-        var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro" })
 
-        $('#f1').append(ficheiroInput);
+        var val = $("#publicacaoForm").find("#f1 #ficheiro").filter(":hidden").length
+
+        if (val == 1) {
+            $("#publicacaoForm").find("#f1 #ficheiro:first").show()
+        } else {
+            var ficheiroInput = $('<input/>', { class: 'w3-input w3-cell', type: 'file', name: "ficheiro", id: "ficheiro" })
+            $('.f1').append(ficheiroInput);
+        }
+    })
+
+    $("#removefile").click(e => {
+        e.preventDefault()
+        var val = $("#publicacaoForm").find("#f1 #ficheiro").length
+        var fInput = $("#publicacaoForm").find("#f1 #ficheiro:last")
+        if (val == 1) {
+            fInput.hide()
+            fInput.val('')
+        } else {
+            fInput.remove()
+        }
     })
 
     var close = document.getElementsByClassName("closebtn");
@@ -124,72 +142,137 @@ $(function () {
         $('#hidePublicacaoForm').removeClass('w3-hide');
     })
 
-    function showTabFeed() {
+    function showTabFeed(tag, tagr) {
+        if (tag == "Sem tag") {
+            var url = "/pubsComTag?metadata=semmd"
+        } else if (tagr == "Mostrar tudo") {
+            var url = "/feed"
+        } else if (tag != undefined) {
+            var url = "/pubsComTag?metadata=" + tag
+        } else {
+            var url = "/feed"
+        }
         $('#publicacoesInsertZone').empty();
         $.ajax({
-            url: "/feed"
+            url: url
         })
-        .done(function( data ) {
-            $('#gruposLayout').hide();
-            $('#grupoLayout').hide();
-            $('#publicacoesLayout').show();
-            $('#perfilLayout').hide();
-            $('#mensagensLayout').hide();
-            $('#tabGrupos').removeClass('active');
-            $('#tabFeed').addClass('active');
-            $('#tabPerfil').removeClass('active');
-            $('#tabMensagens').removeClass('active');
-            data.forEach(function(item){
-                var Clone = $('#templatePublicacoes #idk #t').clone(true);
-                var pubClone = $('#pub').clone(true);
-                Clone.attr("style", "");
-                pubClone.attr("style", "");
-                if(item.conteudo == '') {
-                    pubClone.find('#conteudoPub').text("Publicação sem mensagem");
-                } else {
-                    pubClone.find('#conteudoPub').text(item.conteudo);
-                }
-                if (item.metadata == '') {
-                    pubClone.find('#metadataPub').text("Publicação sem tags");
-                } else {
-                    pubClone.find('#metadataPub').text("Tags: "+ item.metadata);
-                }
-                var userInSession = $('#utilizador').val();
-                if(item.utilizador != userInSession) {
-                    pubClone.find('#removePublicacaoBtn').remove();
-                }
-                pubClone.find('#dataPub').text(item.data);
-                pubClone.find('#idPub').text(item._id);
+            .done(function (data) {
+                $('#gruposLayout').hide();
+                $('#grupoLayout').hide();
+                $('#publicacoesLayout').show();
+                $('#perfilLayout').hide();
+                $('#tabGrupos').removeClass('active');
+                $('#tabFeed').addClass('active');
+                $('#tabPerfil').removeClass('active');
+                data.forEach(function (item) {
+                    var Clone = $('#templatePublicacoes #idk #t').clone(true);
+                    var pubClone = $('#pub').clone(true);
+                    Clone.attr("style", "");
+                    pubClone.attr("style", "");
+                    pubClone.find("#publicadorPub").text("Publicado por: " + item.utilizador)
+                    if (item.conteudo == '') {
+                        pubClone.find('#conteudoPub').text("Publicação sem mensagem");
+                    } else {
+                        pubClone.find('#conteudoPub').text(item.conteudo);
+                    }
+                    if (item.metadata == '') {
+                        pubClone.find('#metadataPub').text("Publicação sem tags");
+                    } else {
+                        pubClone.find('#metadataPub').text("Tags: " + item.metadata);
+                    }
+                    pubClone.find('#dataPub').text(item.data);
+                    pubClone.find('#idPub').text(item._id);
+                    var userInSession = $('#utilizador').val();
+                    if (item.utilizador != userInSession) {
+                        pubClone.find('#removePublicacaoBtn').hide();
+                    } else {
+                        pubClone.find('#removePublicacaoBtn').show()
+                    }
 
-                pubClone.appendTo(Clone)
+                    if (item.ficheiros.length > 0) {
+                        fileZone = pubClone.find('#fileZone')
+                        fileZone.empty();
+                        fileZone.attr("style", "")
+                        fileZone.append('<h4 style="font-weight:bold">Ficheiros partilhados</h4')
 
-                var comentzone = Clone.find('#comentZone')
-                comentzone.empty();
+                        item.ficheiros.forEach(function (itemf) {
+                            var pubFileClone = $('#fileNamePub').clone(true)
+                            pubFileClone.attr("style", "")
+                            //pubFileClone.attr("onclick", showFileInfo())
+                            pubFileClone.click({ pubid: item._id, fileName: itemf.designacao, size: itemf.size, mimetype: itemf.mimetype }, showFileInfo);
+                            pubFileClone.find("#fileNamePubp").text(itemf.designacao)
+                            pubFileClone.appendTo(fileZone)
+                        })
+                    } else {
+                        fileZone = pubClone.find('#fileZone')
+                        fileZone.empty();
+                        fileZone.attr("style", "display:none")
+                    }
 
-                if(item.comentarios.length > 0) {
-                    $("#titComentarios").attr("style", "")
-                    $("#titComentarios").appendTo(comentzone)
-                    item.comentarios.forEach(function(itemc){
-                        var comClone = $('#templateComentarios').clone(true);
-                        comClone.attr("style", "");
-                        comClone.find('#conteudoCom').text(itemc.conteudo);
-                        comClone.find('#utilizadorCom').text("Comentado por: " + itemc.utilizador + " Buscar o nome?");
-                        comClone.find('#dataCom').text(itemc.data);
-                        comClone.find('#idCom').text(itemc._id);
-                        comClone.find('#idPub').text(item._id);
-                        comClone.appendTo(comentzone);
-                    });
-                }
-                var formComentClone = $('#divComentarioForm').clone(true);
-                formComentClone.attr("style", "");
-                formComentClone.find('#pubidForm').val(item._id);
-                formComentClone.appendTo(comentzone);
-                var hideButtons = $('#divHideButton').clone(true);
-                hideButtons.attr("style", "");
-                hideButtons.appendTo(Clone);
-                Clone.appendTo("#publicacoesInsertZone");
+                    pubClone.appendTo(Clone)
+
+                    var comentzone = Clone.find('#comentZone')
+                    comentzone.empty();
+
+                    if (item.comentarios.length > 0) {
+                        comentzone.append('<h4 style="font-weight:bold">Comentários</h4')
+                        item.comentarios.forEach(function (itemc) {
+                            var comClone = $('#templateComentarios').clone(true);
+                            comClone.attr("style", "");
+                            comClone.find('#conteudoCom').text(itemc.conteudo);
+                            comClone.find('#utilizadorCom').text("Comentado por: " + itemc.nome_user);
+                            comClone.find('#dataCom').text(itemc.data);
+                            comClone.find('#idCom').text(itemc._id);
+                            comClone.find('#idPub').text(item._id);
+                            comClone.appendTo(comentzone);
+                        });
+                    }
+                    var formComentClone = $('#divComentarioForm').clone(true);
+                    formComentClone.attr("style", "");
+                    formComentClone.find('#pubidForm').val(item._id);
+                    formComentClone.appendTo(comentzone);
+                    var hideButtons = $('#divHideButton').clone(true);
+                    hideButtons.attr("style", "");
+                    hideButtons.appendTo(Clone);
+                    Clone.appendTo("#publicacoesInsertZone");
+                })
+            });
+
+        $("#searchZone").empty()
+        $.ajax({
+            url: "/tagsPubsUser"
+        })
+            .done(function (data) {
+                $("#searchZone").append("<h3>Tags</h3>")
+                // ?
+                var tagSpanClone = $('#tagSpan').clone(true);
+                tagSpanClone.attr("style", "")
+                tagSpanClone.text("Mostrar tudo")
+                tagSpanClone.appendTo("#searchZone")
+
+                data.forEach(function (item) {
+                    var tagSpanClone = $('#tagSpan').clone(true);
+                    tagSpanClone.attr("style", "")
+                    if (item._id == "") {
+                        tagSpanClone.text("Sem tag (" + item.count + ")")
+                    } else {
+                        tagSpanClone.text(item._id + " (" + item.count + ")")
+                    }
+
+                    tagSpanClone.appendTo("#searchZone")
+                })
             })
-        });
+
+        if (tag == undefined) {
+            $('#tagSpan:contains("Mostrar tudo")').removeClass('w3-light-grey')
+            $('#tagSpan:contains("Mostrar tudo")').addClass('w3-black')
+            $('#tagSpan:contains("Mostrar tudo")').attr('style', "color:blue")
+        } else {
+            $('#tagSpan:contains("' + tagr + '")').removeClass('w3-light-grey')
+            $('#tagSpan:contains("' + tagr + '")').addClass('w3-black')
+            $('#tagSpan:contains("' + tagr + '")').attr('style', "color:blue")
+        }
+
     }
 
     showTabFeed();
@@ -265,8 +348,6 @@ $(function () {
     })
 
     $("#removePublicacaoBtn").click(function (e) {
-
-
         var data = "pubid=" + $(this).closest("#pub").find("#idPub").text();
 
         $.ajax({
@@ -290,6 +371,39 @@ $(function () {
                 }
             }
         });
+    })
+
+    function showFileInfo(event) {
+        var url = "http://localhost:5003/publicacoes/getFicheiro"
+
+        var fileName = $('<h5>' + event.data.fileName + '</h5>')
+        var fileSize = $('<h5> Tamanho: ' + event.data.size + ' Bytes' + '</h5>')
+
+        var data = "pubid=" + event.data.pubid + "&fileName=" + event.data.fileName
+
+
+
+        //if (event.data.mimetype == 'image/png' || event.data.mimetype == 'image/jpeg') {
+        //  var ficheiro = $('<img src="' + response.path + '"width="40%"/>')
+        //} else {
+        //var ficheiro = $('<p>' + JSON.stringify(event.data) + '</p>')
+        //}
+        var download = $('<div><a href="http://localhost:5003/publicacoes/getFicheiro?pubid=' + event.data.pubid + '&fileName=' + event.data.fileName + '">Download</a></div>')
+
+        //var ficheiro = $('<p>' + JSON.stringify(f) + '</p>')
+        //var download = $('<div><a href="/download/' + f.name + '">Download</a></div>')
+        $("#display").empty()
+        $('#display').append(fileName, fileSize, download)
+        $('#display').modal()
+    }
+
+
+    $("#tagSpan").click(function (e) {
+        var tag = $(this).text()
+        var tagr = tag
+        tag = tag.substring(0, tag.indexOf('('));
+        tag = tag.substring(0, tag.length - 1);
+        showTabFeed(tag, tagr)
     })
 
 })

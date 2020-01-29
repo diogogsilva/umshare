@@ -15,6 +15,12 @@ router.get('/:email', passport.authenticate('jwt', { session: false }), function
     .catch(e => res.status(500).jsonp(e))
 });
 
+router.get('/identifier/:id', passport.authenticate('jwt', { session: false }), function (req, res) {
+  Utilizadores.consultarPorId(req.params.id)
+    .then(dados => res.jsonp(dados))
+    .catch(e => res.status(500).jsonp(e))
+});
+
 router.post('/', function (req, res) {
   Utilizadores.inserir(req.body)
     .then(dados => res.jsonp(dados))

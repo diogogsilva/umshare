@@ -26,6 +26,7 @@ module.exports.filtrar_grupo = grupo => {
 module.exports.filtrar_sem_grupo = () => {
     return Publicacao
         .find({ grupo: "" })
+        .sort({ "data": - 1 })
         .exec()
 }
 
@@ -40,12 +41,21 @@ module.exports.filtrar_utilizador = utilizador => {
 
 // Listar por metadata?
 
-module.exports.filtrar_metadata = md => {
+module.exports.filtrar_pubs_metadata = (md) => {
     return Publicacao
         .aggregate(
-            [{ $unwind: "$metadata" }, { $match: { 'metadata': { $regex: md, $options: 'i' } } }]
+            [{ $unwind: "$metadata" }, { $match: { 'metadata': md, grupo: '' } }, { $sort: { data: -1 } }]
         )
 }
+
+module.exports.listar_tags = (grupo) => {
+    return Publicacao
+        .aggregate(
+            [{ $unwind: "$metadata" }, { $match: { "grupo": grupo } }, { $group: { _id: "$metadata", count: { $sum: 1 } } }, { $sort: { count: -1, _id: 1 } }]
+        )
+}
+
+//db.publicacoes.aggregate([{$unwind: "$metadata"}, {$match: {"utilizador" : "ruijorge@gmail.com", "grupo" : ""}}, {$group:{_id: "$metadata", count:{$sum:1}}}, {$sort:{count:-1}}])
 
 // Inserção de publicação
 
