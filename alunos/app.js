@@ -9,11 +9,11 @@ mongoose.connect('mongodb://127.0.0.1:27017/umshare-Alunos', { useNewUrlParser: 
   .then(() => console.log('Servidor Mongo da API do UMShare a correr...'))
   .catch((erro) => console.log('Mongo: erro na conexão: ' + erro))
 
-var eventosRouter = require('./routes/eventos');
 var utilizadoresRouter = require('./routes/utilizadores');
 var ficheirosRouter = require('./routes/ficheiros');
 var publicacoesRouter = require('./routes/publicacoes');
 var gruposRouter = require('./routes/grupos');
+var conversasRouter = require('./routes/conversas');
 
 //atutenticação com JWT
 var passport = require('passport')
@@ -64,11 +64,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/eventos', eventosRouter)
 app.use('/utilizadores', utilizadoresRouter);
 app.use('/ficheiros', publicacoesRouter);
 app.use('/publicacoes', publicacoesRouter);
 app.use('/grupos', gruposRouter);
+app.use('/conversas', conversasRouter);
+
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

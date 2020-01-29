@@ -1,6 +1,5 @@
 $(function () {
 
-
     $("#tabGrupos").on("click", function () {
         if(!$('#tabGrupos').hasClass('active')){
             reloadGrupos();
@@ -43,9 +42,11 @@ $(function () {
         $('#gruposLayout').show();
         $('#grupoLayout').hide();
         $('#perfilLayout').hide();
+        $('#mensagensLayout').hide();
         $('#tabFeed').removeClass('active');
         $('#tabGrupos').addClass('active');
         $('#tabPerfil').removeClass('active');
+        $('#tabMensagens').removeClass('active');
         data.forEach(function(item){
             var clone = $('#templateGrupos').clone(true);
             clone.attr("style", "");
