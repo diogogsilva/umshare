@@ -99,13 +99,9 @@ $("#enviarMensagem").submit(function (e) {
             console.log(response)
             var username = userInSession; 
             socket.emit('join', { username: username });
-             socket.on('user disconnected', function (data) {
-                $("#"+data.username).remove();
-             });
              
             var i = 0;
             socket.on('chat message', function (data) {
-                console.log('ENTROU AUQI')
                 if(i == 0) {
                     var string = '<div class="row message-bubble"><p class="text-muted"><b>Por: ' + data.username +'</b> - Em: ' + dataAtual() + '</p><p>'+ data.message +'</p></div>';
                     $('#messages').append(string);
@@ -118,14 +114,14 @@ $("#enviarMensagem").submit(function (e) {
             $('.typing').html("");
             socket.emit('new_message', { message: message, username: username });    
         
-           /* $("#sendmessage").on('click',function (e) {
+            $("#sendmessage").on('click',function (e) {
                 e.preventDefault();
                 var message = $("#txtmessage").val();
                 $("#txtmessage").val('');
                 $('.typing').html("");
                 socket.emit('new_message', { message: message, username: username });    
 
-                })*/
+                })
 
         }
     });
